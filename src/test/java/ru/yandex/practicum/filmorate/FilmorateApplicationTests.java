@@ -27,7 +27,7 @@ class FilmorateApplicationTests {
 	}
 
 	@BeforeEach
-	void BeforeEach() {
+	void beforeEach() {
 		user.setId(1);
 		user.setName("user");
 		user.setLogin("user");
@@ -41,7 +41,7 @@ class FilmorateApplicationTests {
 	}
 
 	@AfterEach
-	void AfterEach() {
+	void afterEach() {
 		user.setId(1);
 		user.setName("user");
 		user.setLogin("user");
