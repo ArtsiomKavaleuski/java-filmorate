@@ -20,7 +20,9 @@ public class UserController {
     private final Map<Long, User> users = new HashMap<>();
 
     @GetMapping
-    public Collection<User> getAll() {return users.values();}
+    public Collection<User> getAll() {
+        return users.values();
+    }
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
