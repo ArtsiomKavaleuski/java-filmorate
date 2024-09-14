@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -58,7 +57,7 @@ public class UserController {
     }
 
     private void validateUser(User user) {
-        if (!user.getEmail().contains("@") || user.getEmail() == null || user.getEmail().isBlank()) {
+        if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
             log.info("Не указана электронная почта пользователя с id = {}", user.getId());
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
         }
