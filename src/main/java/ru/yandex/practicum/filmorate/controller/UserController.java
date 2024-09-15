@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -25,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user) {
+    public User create(@RequestBody User user) {
         validateUser(user);
         user.setId(getNextId());
         users.put(user.getId(), user);
@@ -37,15 +36,11 @@ public class UserController {
     public User update(@RequestBody User newUser) {
         validateUser(newUser);
         if (users.containsKey(newUser.getId())) {
-            User oldUser = users.get(newUser.getId());
-            oldUser.setName(newUser.getName());
-            oldUser.setEmail(newUser.getEmail());
-            oldUser.setLogin(newUser.getLogin());
-            oldUser.setBirthday(newUser.getBirthday());
-            log.info("Изменен пользователь с id = {}", oldUser.getId());
-            return oldUser;
+            users.put(newUser.getId(), newUser);
+            log.info("Изменен пользователь с id = {}", newUser.getId());
+            return newUser;
         }
-        log.info("Пользователь с id = {} не найден", newUser.getId());
+        log.warn("Пользователь с id = {} не найден", newUser.getId());
         throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден");
     }
 
@@ -60,15 +55,15 @@ public class UserController {
 
     private void validateUser(User user) {
         if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
-            log.info("Не указана электронная почта пользователя с id = {}", user.getId());
+            log.warn("Не указана электронная почта пользователя с id = {}", user.getId());
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
         }
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.info("Логин пользователя с id = {} не указан или содержит пробелы", user.getId());
+            log.warn("Логин пользователя с id = {} не указан или содержит пробелы", user.getId());
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("Введенная дата рождения пользователя с id = {} некорректна", user.getId());
+            log.warn("Введенная дата рождения пользователя с id = {} некорректна", user.getId());
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
         if (user.getName() == null || user.getName().isBlank()) {

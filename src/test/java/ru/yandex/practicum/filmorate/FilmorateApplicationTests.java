@@ -1,11 +1,11 @@
 package ru.yandex.practicum.filmorate;
 
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controller.FilmController;
 import ru.yandex.practicum.filmorate.controller.UserController;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -13,10 +13,10 @@ import java.time.LocalDate;
 
 @SpringBootTest
 class FilmorateApplicationTests {
+
 	@Autowired
 	UserController userController;
 	User user = new User();
-
 
 	@Autowired
 	FilmController filmController;
@@ -61,6 +61,7 @@ class FilmorateApplicationTests {
 	}
 
 	@Test
+
 	void shouldThrowValidationExceptionWhenUserBirthdayIsInFuture() {
 		user.setBirthday(LocalDate.of(2033,01,01));
 		Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
@@ -117,6 +118,36 @@ class FilmorateApplicationTests {
 	@Test
 	void shouldNotThrowValidationExceptionWhenFilmFieldsAreCorrect() {
 		Assertions.assertDoesNotThrow(() -> filmController.create(film));
+	}
+
+	@Test
+	void shouldNotThrowValidationExceptionWhenUpdateFilmWithCorrectFields() {
+		filmController.create(film);
+		film.setDuration(200);
+		Assertions.assertDoesNotThrow(() -> filmController.update(film));
+		Assertions.assertTrue(filmController.getAll().contains(film));
+	}
+
+	@Test
+	void shouldThrowValidationExceptionWhenUpdateFilmWithIncorrectFields() {
+		filmController.create(film);
+		film.setDuration(-100);
+		Assertions.assertThrows(ValidationException.class,() -> filmController.update(film));
+	}
+
+	@Test
+	void shouldNotThrowValidationExceptionWhenUpdateUserWithCorrectFields() {
+		userController.create(user);
+		user.setName("Anon");
+		Assertions.assertDoesNotThrow(() -> userController.update(user));
+		Assertions.assertTrue(userController.getAll().contains(user));
+	}
+
+	@Test
+	void shouldThrowValidationExceptionWhenUpdateUserWithIncorrectFields() {
+		userController.create(user);
+		user.setEmail("");
+		Assertions.assertThrows(ValidationException.class, () -> userController.update(user));
 	}
 
 
