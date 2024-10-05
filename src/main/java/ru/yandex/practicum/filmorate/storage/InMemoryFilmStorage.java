@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -20,6 +21,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Collection<Film> getAll() {
         return films.values();
     }
+
+    public Film getFilmById(long id) {return films.getOrDefault(id, null);}
 
     public Film create(Film film) {
         validateFilm(film);

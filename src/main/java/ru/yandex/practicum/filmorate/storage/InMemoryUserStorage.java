@@ -22,7 +22,9 @@ public class InMemoryUserStorage implements UserStorage {
         return users.values();
     }
 
-    public User create(@RequestBody User user) {
+    public User getUserById(long id) {return users.getOrDefault(id, null);}
+
+    public User create(User user) {
         validateUser(user);
         user.setId(getNextId());
         users.put(user.getId(), user);
@@ -30,7 +32,7 @@ public class InMemoryUserStorage implements UserStorage {
         return user;
     }
 
-    public User update(@RequestBody User newUser) {
+    public User update(User newUser) {
         validateUser(newUser);
         if (users.containsKey(newUser.getId())) {
             users.put(newUser.getId(), newUser);
