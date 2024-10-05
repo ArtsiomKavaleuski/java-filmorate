@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        if(userStorage.getUserById(id) == null) {
+        if (userStorage.getUserById(id) == null) {
             log.warn("Пользователь с id = {} не найден.", id);
             throw new NotFoundException("Пользователь с id = " + id + " не найден");
         }
@@ -40,17 +40,17 @@ public class UserService {
     }
 
     public User addFriend(long id, long friendId) {
-        if(userStorage.getUserById(id) == null) {
+        if (userStorage.getUserById(id) == null) {
             log.warn("Пользователь с id = {} не найден", id);
             throw new NotFoundException("Пользователь с id=" + id + " не найден.");
         }
-        if(userStorage.getUserById(friendId) == null) {
+        if (userStorage.getUserById(friendId) == null) {
             log.warn("Пользователь, добавляемый в друзья с id = {} не найден", friendId);
             throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
         }
-        if(id == friendId) {
+        if (id == friendId) {
             log.warn("Пользователя с id {} нельзя добавить в друзья к самому себе.", id);
-            throw new ValidationException("Пользователя с id " + id +  " нельзя добавить в друзья к самому себе.");
+            throw new ValidationException("Пользователя с id " + id + " нельзя добавить в друзья к самому себе.");
         }
         userStorage.getUserById(id).addToFriends(friendId);
         userStorage.getUserById(friendId).addToFriends(id);
@@ -59,11 +59,11 @@ public class UserService {
     }
 
     public User removeFriend(long id, long friendId) {
-        if(userStorage.getUserById(id) == null) {
+        if (userStorage.getUserById(id) == null) {
             log.warn("Пользователь с id = {} не найден", id);
             throw new NotFoundException("Пользователь с id=" + id + " не найден.");
         }
-        if(userStorage.getUserById(friendId) == null) {
+        if (userStorage.getUserById(friendId) == null) {
             log.warn("Пользователь с id = {}, удаляемый из друзей, не найден", friendId);
             throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
         }
@@ -73,7 +73,7 @@ public class UserService {
     }
 
     public Collection<User> getAllFriends(long id) {
-        if(userStorage.getUserById(id) == null) {
+        if (userStorage.getUserById(id) == null) {
             log.warn("Пользователь с id = {} не найден", id);
             throw new NotFoundException("Пользователь с id=" + id + " не найден.");
         }
@@ -81,11 +81,11 @@ public class UserService {
     }
 
     public List<User> getCommonFriends(long id, long otherId) {
-        if(userStorage.getUserById(id) == null) {
+        if (userStorage.getUserById(id) == null) {
             log.warn("Пользователь с id = {} не найден", id);
             throw new NotFoundException("Пользователь с id=" + id + " не найден.");
         }
-        if(userStorage.getUserById(otherId) == null) {
+        if (userStorage.getUserById(otherId) == null) {
             log.warn("Пользователь, добавляемый в друзья с id = {} не найден", otherId);
             throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + otherId + " не найден.");
         }
@@ -94,8 +94,6 @@ public class UserService {
                 .map(userStorage::getUserById)
                 .toList();
     }
-
-
 
 
 }

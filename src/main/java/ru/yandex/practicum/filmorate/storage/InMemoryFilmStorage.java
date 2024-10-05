@@ -21,7 +21,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         return films.values();
     }
 
-    public Film getFilmById(long id) {return films.getOrDefault(id, null);}
+    public Film getFilmById(long id) {
+        return films.getOrDefault(id, null);
+    }
 
     public Film create(Film film) {
         validateFilm(film);

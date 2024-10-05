@@ -10,7 +10,7 @@ import java.util.Set;
  * Film.
  */
 @Data
-public class Film implements Comparable<Film>{
+public class Film implements Comparable<Film> {
     long id;
     String name;
     String description;

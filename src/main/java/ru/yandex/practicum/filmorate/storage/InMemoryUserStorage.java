@@ -21,7 +21,9 @@ public class InMemoryUserStorage implements UserStorage {
         return users.values();
     }
 
-    public User getUserById(long id) {return users.getOrDefault(id, null);}
+    public User getUserById(long id) {
+        return users.getOrDefault(id, null);
+    }
 
     public User create(User user) {
         validateUser(user);
