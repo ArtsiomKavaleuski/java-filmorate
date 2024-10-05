@@ -62,6 +62,7 @@ public class FilmService {
         if(!filmStorage.getFilmById(filmId).getLikes().contains(userId)) {
             log.warn("Лайк пользователя c id = {} фильму с id = {} не может быть удален, так как не был поставлен",
                     userId, filmId);
+            throw new NotFoundException("Лайк пользователя с id = " + userId +  " не может быть удален, так как не был им поставлен.");
         }
         filmStorage.getFilmById(filmId).removeFromLikes(userId);
         log.info("Пользователь с id = {} удалил свой лайк фильму с id = {}.", userId, filmId);

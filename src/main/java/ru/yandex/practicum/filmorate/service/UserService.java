@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -68,22 +67,28 @@ public class UserService {
             log.warn("Пользователь с id = {}, удаляемый из друзей, не найден", friendId);
             throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
         }
-        if(!userStorage.getUserById(id).getFriends().contains(friendId)) {
-            log.warn("Пользователь с id = {} удаляемый из друзей, не является другом пользователя с id = {}",
-                    friendId, id);
-            throw new NotFoundException("Пользователь с id = " + friendId
-                    + " удаляемый из друзей, не является другом пользователя с id = " + id);
-        }
         userStorage.getUserById(id).removeFromFriends(friendId);
         userStorage.getUserById(friendId).removeFromFriends(id);
         return userStorage.getUserById(friendId);
     }
 
     public Collection<User> getAllFriends(long id) {
+        if(userStorage.getUserById(id) == null) {
+            log.warn("Пользователь с id = {} не найден", id);
+            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
+        }
         return userStorage.getUserById(id).getFriends().stream().map(userStorage::getUserById).toList();
     }
 
     public List<User> getCommonFriends(long id, long otherId) {
+        if(userStorage.getUserById(id) == null) {
+            log.warn("Пользователь с id = {} не найден", id);
+            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
+        }
+        if(userStorage.getUserById(otherId) == null) {
+            log.warn("Пользователь, добавляемый в друзья с id = {} не найден", otherId);
+            throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + otherId + " не найден.");
+        }
         return userStorage.getUserById(id).getFriends().stream()
                 .filter(l -> userStorage.getUserById(otherId).getFriends().contains(l))
                 .map(userStorage::getUserById)
