@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -26,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable("id") long id) {
-        return Optional.ofNullable(userService.getUserById(id));
+    public User getUserById(@PathVariable("id") long id) {
+        return userService.getUserById(id);
     }
 
     @GetMapping("/{id}/friends")
@@ -43,24 +42,28 @@ public class UserController {
 
     @PostMapping
     public User create(@RequestBody User user) {
+        log.info("Передан объект пользователя {} для добавления.", user);
         return userService.create(user);
     }
 
     @PutMapping
     public User update(@RequestBody User newUser) {
+        log.info("Передан модифицированный объект пользователя {} для обновления.", newUser);
         return userService.update(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public Optional<User> addToFriends(@PathVariable("id") long id,
+    public User addToFriends(@PathVariable("id") long id,
                                        @PathVariable("friendId") long friendId) {
-        return Optional.ofNullable(userService.addFriend(id, friendId));
+        log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
+        return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public Optional<User> removeFriend(@PathVariable("id") long id,
+    public User removeFriend(@PathVariable("id") long id,
                                        @PathVariable("friendId") long friendId) {
-        return Optional.ofNullable(userService.removeFriend(id, friendId));
+        log.info("Передан id = {} для удаления из друзей пользователя с id = {}", friendId, id);
+        return userService.removeFriend(id, friendId);
     }
 
 

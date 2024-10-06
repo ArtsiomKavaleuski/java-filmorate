@@ -18,13 +18,13 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleNotFound(final ValidationException e) {
+    public ErrorResponse handleValidationException(final ValidationException e) {
         return new ErrorResponse("error", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleNotFound(final RuntimeException e) {
+    public ErrorResponse handleRuntimeException(final RuntimeException e) {
         return new ErrorResponse("error", "Произошла непредвиденная ошибка.");
     }
 }

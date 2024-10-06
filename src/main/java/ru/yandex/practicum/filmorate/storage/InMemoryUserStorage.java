@@ -29,7 +29,7 @@ public class InMemoryUserStorage implements UserStorage {
         validateUser(user);
         user.setId(getNextId());
         users.put(user.getId(), user);
-        log.info("Добавлен пользователь с id = {}", user.getId());
+        log.info("Пользователь добавлен и ему присвоен id = {}", user.getId());
         return user;
     }
 
@@ -37,7 +37,7 @@ public class InMemoryUserStorage implements UserStorage {
         validateUser(newUser);
         if (users.containsKey(newUser.getId())) {
             users.put(newUser.getId(), newUser);
-            log.info("Изменен пользователь с id = {}", newUser.getId());
+            log.info("Пользователь с id = {} изменен", newUser.getId());
             return newUser;
         }
         log.warn("Пользователь с id = {} не найден", newUser.getId());
@@ -55,20 +55,20 @@ public class InMemoryUserStorage implements UserStorage {
 
     private void validateUser(User user) {
         if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
-            log.warn("Не указана электронная почта пользователя с id = {}", user.getId());
+            log.warn("Не указана электронная почта пользователя");
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
         }
         if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.warn("Логин пользователя с id = {} не указан или содержит пробелы", user.getId());
+            log.warn("Логин пользователя не указан или содержит пробелы");
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Введенная дата рождения пользователя с id = {} некорректна", user.getId());
+            log.warn("Введенная дата рождения пользователя некорректна");
             throw new ValidationException("Дата рождения не может быть в будущем");
         }
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
-            log.info("Вместо имени пользователя с id = {} использован логин", user.getId());
+            log.info("Вместо имени пользователя использован логин");
         }
     }
 }

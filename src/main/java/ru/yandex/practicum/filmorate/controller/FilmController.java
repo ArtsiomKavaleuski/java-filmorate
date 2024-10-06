@@ -7,7 +7,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/films")
@@ -26,8 +25,8 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Film> getFilmById(@PathVariable("id") long id) {
-        return Optional.ofNullable(filmService.getFilmById(id));
+    public Film getFilmById(@PathVariable("id") long id) {
+        return filmService.getFilmById(id);
     }
 
     @GetMapping("/popular")
@@ -37,21 +36,25 @@ public class FilmController {
 
     @PostMapping
     public Film create(@RequestBody Film film) {
+        log.info("Передан объект фильма {} для добавления.", film);
         return filmService.create(film);
     }
 
     @PutMapping
     public Film update(@RequestBody Film newFilm) {
+        log.info("Передан модифицированный объект фильма {} для обновления.", newFilm);
         return filmService.update(newFilm);
     }
 
     @PutMapping("/{id}/like/{userId}")
     public void addLikeToFilm(@PathVariable("id") long id, @PathVariable("userId") long userId) {
+        log.info("Передан id = {} пользователя для добавления лайка фильму с id = {}", userId, id);
         filmService.addLikeToFilm(id, userId);
     }
 
     @DeleteMapping("/{id}/like/{userId}")
     public void removeLikeFromFilm(@PathVariable("id") long id, @PathVariable("userId") long userId) {
+        log.info("Передан id = {} пользователя для удаления его лайка фильму с id = {}", userId, id);
         filmService.removeLikeFromFilm(id, userId);
     }
 

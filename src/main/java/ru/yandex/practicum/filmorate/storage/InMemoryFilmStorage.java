@@ -29,7 +29,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         validateFilm(film);
         film.setId(getNextId());
         films.put(film.getId(), film);
-        log.info("Добавлен фильм с id = {}", film.getId());
+        log.info("Фильм добавлен и ему присвоен id = {}", film.getId());
         return film;
     }
 
@@ -37,7 +37,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         validateFilm(newFilm);
         if (films.containsKey(newFilm.getId())) {
             films.put(newFilm.getId(), newFilm);
-            log.info("Изменен фильм с id {}", newFilm.getId());
+            log.info("Фильм с id {} изменен", newFilm.getId());
             return newFilm;
         }
         log.warn("Фильм с id = {} не найден", newFilm.getId());
@@ -55,19 +55,19 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isBlank()) {
-            log.warn("Введенное название фильма с id = {} пустое", film.getId());
+            log.warn("Введенное название фильма пустое", film.getId());
             throw new ValidationException("Название не может быть пустым");
         }
         if (film.getDescription().length() > 200) {
-            log.warn("Введенное описание фильма с id = {} содержит {} из 200 возможных символов", film.getId(), film.getDescription().length());
+            log.warn("Введенное описание фильма содержит {} из 200 возможных символов", film.getDescription().length());
             throw new ValidationException("Максимальная длина описания - 200 символов");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("Введенная дата релиза {} фильма с id = {} не может быть раньше 28 декабря 1895 года", film.getReleaseDate(), film.getId());
+            log.warn("Введенная дата релиза {} фильма не может быть раньше 28 декабря 1895 года", film.getReleaseDate());
             throw new ValidationException("Дата релиза - не раньше 28 декабря 1895 года");
         }
         if (film.getDuration() < 0) {
-            log.warn("Введенная продолжительность {} фильма с id = {} не является положительным числом", film.getDuration(), film.getId());
+            log.warn("Введенная продолжительность {} фильма не является положительным числом", film.getDuration());
             throw new ValidationException("продолжительность фильма должна быть положительным числом");
         }
     }
