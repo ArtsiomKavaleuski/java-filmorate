@@ -1,6 +1,8 @@
 DELETE FROM users;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
 
 DELETE FROM films;
+ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
 INSERT INTO filmorate.users (email, login, name, birthday)
 VALUES ('koval@bff.by', 'koval', 'Artem', '1994-04-05');

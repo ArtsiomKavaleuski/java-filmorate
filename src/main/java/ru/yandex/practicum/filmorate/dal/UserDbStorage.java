@@ -17,14 +17,13 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @Repository
-@Primary
 public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
-    private static final String FIND_ALL_QUERY = "SELECT * FROM users";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT * FROM users;";
+    private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?;";
     private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday)" +
-            "VALUES (?, ?, ?, ?) returning id";
-    private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?";
+            "VALUES (?, ?, ?, ?);";
+    private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?;";
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
@@ -56,7 +55,6 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public User update(User newUser) {
-
         update(
                 UPDATE_QUERY,
                 newUser.getEmail(),

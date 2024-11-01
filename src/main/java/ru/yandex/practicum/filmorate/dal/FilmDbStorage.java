@@ -14,11 +14,11 @@ import java.util.Collection;
 @Primary
 public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
-    private static final String FIND_ALL_QUERY = "SELECT * FROM films";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?";
+    private static final String FIND_ALL_QUERY = "SELECT * FROM films;";
+    private static final String FIND_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?;";
     private static final String INSERT_QUERY = "INSERT INTO films(name, description, releaseDate, duration)" +
-            "VALUES (?, ?, ?, ?) returning id";
-    private static final String UPDATE_QUERY = "UPDATE users SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?";
+            "VALUES (?, ?, ?, ?);";
+    private static final String UPDATE_QUERY = "UPDATE users SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?;";
 
 
     @Autowired

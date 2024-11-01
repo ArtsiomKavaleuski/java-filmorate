@@ -15,7 +15,6 @@ public final class UserMapper {
         user.setLogin(request.getLogin());
         user.setName(request.getName());
         user.setBirthday(request.getBirthday());
-
         return user;
     }
 }

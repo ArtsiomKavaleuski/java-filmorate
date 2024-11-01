@@ -47,11 +47,11 @@ public class UserController {
         return userService.create(request);
     }
 
-//    @PutMapping
-//    public User update(@RequestBody User newUser) {
-//        log.info("Передан модифицированный объект пользователя {} для обновления.", newUser);
-//        return userService.update(newUser);
-//    }
+    @PutMapping
+    public User update(@RequestBody NewUserRequest request) {
+        log.info("Передан модифицированный объект пользователя {} для обновления.", request);
+        return userService.update(request);
+    }
 
 //    @PutMapping("/{id}/friends/{friendId}")
 //    public User addToFriends(@PathVariable("id") long id,

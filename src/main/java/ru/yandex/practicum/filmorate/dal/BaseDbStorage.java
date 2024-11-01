@@ -10,6 +10,7 @@ import ru.yandex.practicum.filmorate.exception.InternalServerException;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -52,11 +53,11 @@ public class BaseDbStorage<T> {
                 ps.setObject(idx + 1, params[idx]);
             }
             return ps;}, keyHolder);
-
-        Long id = keyHolder.getKeyAs(Long.class);
+        //long id = keyHolder.getKeyAs(Long.class);
+        long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
         // Возвращаем id нового пользователя
-        if (id != null) {
+        if (keyHolder.getKey() != null) {
             return id;
         } else {
             throw new InternalServerException("Не удалось сохранить данные");
