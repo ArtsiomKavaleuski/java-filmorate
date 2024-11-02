@@ -16,6 +16,7 @@ public class Film implements Comparable<Film> {
     String description;
     LocalDate releaseDate;
     long duration;
+    long rateId;
     Set<Long> likes = new HashSet<>();
 
     public void addToLikes(long id) {

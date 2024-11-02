@@ -45,14 +45,14 @@ public class UserService {
         return user;
     }
 
-    public User update(NewUserRequest newUser) {
-        validateUser(newUser);
-        if(userStorage.getUserById(newUser.getId()) == null) {
-            log.warn("Пользователь с id = {} не найден", newUser.getId());
-            throw new NotFoundException("Пользователь с id = " + newUser.getId() + " не найден");
+    public User update(NewUserRequest request) {
+        validateUser(request);
+        if(userStorage.getUserById(request.getId()) == null) {
+            log.warn("Пользователь с id = {} не найден", request.getId());
+            throw new NotFoundException("Пользователь с id = " + request.getId() + " не найден");
         }
-        log.info("Пользователь с id = {} изменен", newUser.getId());
-        User user = UserMapper.mapToUser(newUser);
+        log.info("Пользователь с id = {} изменен", request.getId());
+        User user = UserMapper.mapToUser(request);
         return userStorage.update(user);
     }
 

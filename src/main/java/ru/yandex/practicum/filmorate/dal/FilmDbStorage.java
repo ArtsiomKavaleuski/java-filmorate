@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.dto.NewFilmRequest;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -18,7 +19,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?;";
     private static final String INSERT_QUERY = "INSERT INTO films(name, description, releaseDate, duration)" +
             "VALUES (?, ?, ?, ?);";
-    private static final String UPDATE_QUERY = "UPDATE users SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?;";
+    private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?;";
 
 
     @Autowired
@@ -37,16 +38,16 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     }
 
     @Override
-    public Film create(Film film) {
+    public Film create(Film newFilm) {
         long id = insert(
                 INSERT_QUERY,
-                film.getName(),
-                film.getDescription(),
-                film.getReleaseDate(),
-                film.getDuration()
+                newFilm.getName(),
+                newFilm.getDescription(),
+                newFilm.getReleaseDate(),
+                newFilm.getDuration()
         );
-        film.setId(id);
-        return film;
+        newFilm.setId(id);
+        return newFilm;
     }
 
     @Override

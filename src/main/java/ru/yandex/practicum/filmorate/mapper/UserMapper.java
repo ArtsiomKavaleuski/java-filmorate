@@ -11,6 +11,7 @@ import java.time.Instant;
 public final class UserMapper {
     public static User mapToUser(NewUserRequest request) {
         User user = new User();
+        user.setId(request.getId());
         user.setEmail(request.getEmail());
         user.setLogin(request.getLogin());
         user.setName(request.getName());
