@@ -19,7 +19,7 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?;";
     private static final String INSERT_FRIEND_QUERY = "INSERT INTO friends(userId, friendId)" +
             "VALUES (?, ?);";
-    private static final String FIND_FRIENDS_QUERY = "SELECT * FROM users WHERE (SELECT friendId FROM friends WHERE userId = ?);";
+    private static final String FIND_FRIENDS_QUERY = "SELECT * FROM users WHERE id IN (SELECT friendId FROM friends WHERE userId = ?);";
 
     //private final FriendsStorage friendsStorage;
 
@@ -74,11 +74,11 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
                 id,
                 friendId
         );
-        insert(
-                INSERT_FRIEND_QUERY,
-                friendId,
-                id
-        );
+//        insert(
+//                INSERT_FRIEND_QUERY,
+//                friendId,
+//                id
+//        );
         return friendId;
     }
 

@@ -4,17 +4,13 @@ import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dto.NewUserRequest;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -38,22 +34,20 @@ public class UserService {
         return userStorage.getUserById(id);
     }
 
-    public User create(NewUserRequest request) {
-        validateUser(request);
-        User user = UserMapper.mapToUser(request);
+    public User create(User user) {
+        validateUser(user);
         user = userStorage.create(user);
         log.info("Пользователь добавлен и ему присвоен id = {}", user.getId());
         return user;
     }
 
-    public User update(NewUserRequest request) {
-        validateUser(request);
-        if(userStorage.getUserById(request.getId()) == null) {
-            log.warn("Пользователь с id = {} не найден", request.getId());
-            throw new NotFoundException("Пользователь с id = " + request.getId() + " не найден");
+    public User update(User user) {
+        validateUser(user);
+        if(userStorage.getUserById(user.getId()) == null) {
+            log.warn("Пользователь с id = {} не найден", user.getId());
+            throw new NotFoundException("Пользователь с id = " + user.getId() + " не найден");
         }
-        log.info("Пользователь с id = {} изменен", request.getId());
-        User user = UserMapper.mapToUser(request);
+        log.info("Пользователь с id = {} изменен", user.getId());
         return userStorage.update(user);
     }
 
@@ -118,7 +112,7 @@ public class UserService {
 //    }
 
 
-    private void validateUser(NewUserRequest user) {
+    private void validateUser(User user) {
         if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
             log.warn("Не указана электронная почта пользователя");
             throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");

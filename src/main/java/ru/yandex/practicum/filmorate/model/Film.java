@@ -11,21 +11,17 @@ import java.util.Set;
  */
 @Data
 public class Film implements Comparable<Film> {
-    long id;
-    String name;
-    String description;
-    LocalDate releaseDate;
-    long duration;
-    long rateId;
-    Set<Long> likes = new HashSet<>();
+    private long id;
+    private String name;
+    private String description;
+    private LocalDate releaseDate;
+    private long duration;
+    MPA mpa = new MPA();
 
-    public void addToLikes(long id) {
-        likes.add(id);
-    }
-
-    public void removeFromLikes(long id) {
-        likes.remove(id);
-    }
+    //private long mpa;
+    //private Set<MPA> mpa = new HashSet<>();
+    private Set<Genre> genres = new HashSet<>();
+    private Set<Long> likes = new HashSet<>();
 
     @Override
     public int compareTo(Film film) {

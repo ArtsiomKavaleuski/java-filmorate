@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.dto.NewUserRequest;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
@@ -42,15 +41,15 @@ public class UserController {
 //    }
 
     @PostMapping
-    public User create(@RequestBody NewUserRequest request) {
-        log.info("Передан объект пользователя {} для добавления.", request);
-        return userService.create(request);
+    public User create(@RequestBody User user) {
+        log.info("Передан объект пользователя {} для добавления.", user);
+        return userService.create(user);
     }
 
     @PutMapping
-    public User update(@RequestBody NewUserRequest request) {
-        log.info("Передан модифицированный объект пользователя {} для обновления.", request);
-        return userService.update(request);
+    public User update(@RequestBody User user) {
+        log.info("Передан модифицированный объект пользователя {} для обновления.", user);
+        return userService.update(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
