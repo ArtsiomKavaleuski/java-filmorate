@@ -1,19 +1,12 @@
 package ru.yandex.practicum.filmorate.dal;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.Collection;
 
 @Repository
@@ -24,6 +17,15 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday)" +
             "VALUES (?, ?, ?, ?);";
     private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?;";
+    private static final String INSERT_FRIEND_QUERY = "INSERT INTO friends(userId, friendId)" +
+            "VALUES (?, ?);";
+    private static final String FIND_FRIENDS_QUERY = "SELECT * FROM users WHERE (SELECT friendId FROM friends WHERE userId = ?);";
+
+    //private final FriendsStorage friendsStorage;
+
+    //public UserDbStorage(FriendsStorage friendsStorage) {
+    //    this.friendsStorage = friendsStorage;
+    //}
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
@@ -64,6 +66,24 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
                 newUser.getId()
                 );
         return newUser;
+    }
+
+    public long addFriend(long id, long friendId) {
+        insert(
+                INSERT_FRIEND_QUERY,
+                id,
+                friendId
+        );
+        insert(
+                INSERT_FRIEND_QUERY,
+                friendId,
+                id
+        );
+        return friendId;
+    }
+
+    public Collection<User> getFriends(long id) {
+        return findMany(FIND_FRIENDS_QUERY, id);
     }
 
 

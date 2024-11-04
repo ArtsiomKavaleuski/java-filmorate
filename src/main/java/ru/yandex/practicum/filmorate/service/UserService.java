@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.service;
 
+import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -56,24 +57,28 @@ public class UserService {
         return userStorage.update(user);
     }
 
-//    public User addFriend(long id, long friendId) {
-//        if (userStorage.getUserById(id) == null) {
-//            log.warn("Пользователь с id = {} не найден", id);
-//            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
-//        }
-//        if (userStorage.getUserById(friendId) == null) {
-//            log.warn("Пользователь, добавляемый в друзья с id = {} не найден", friendId);
-//            throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
-//        }
-//        if (id == friendId) {
-//            log.warn("Пользователя с id {} нельзя добавить в друзья к самому себе.", id);
-//            throw new ValidationException("Пользователя с id " + id + " нельзя добавить в друзья к самому себе.");
-//        }
-//        userStorage.getUserById(id).addToFriends(friendId);
-//        userStorage.getUserById(friendId).addToFriends(id);
-//        log.info("Пользователю с id = {} в друзья добавлен пользователь с id = {}.", id, friendId);
-//        return userStorage.getUserById(friendId);
-//    }
+    public User addFriend(long id, long friendId) {
+        if (userStorage.getUserById(id) == null) {
+            log.warn("Пользователь с id = {} не найден", id);
+            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
+        }
+        if (userStorage.getUserById(friendId) == null) {
+            log.warn("Пользователь, добавляемый в друзья с id = {} не найден", friendId);
+            throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
+        }
+        if (id == friendId) {
+            log.warn("Пользователя с id {} нельзя добавить в друзья к самому себе.", id);
+            throw new ValidationException("Пользователя с id " + id + " нельзя добавить в друзья к самому себе.");
+        }
+        if (userStorage.getFriends(id).contains(userStorage.getUserById(friendId))) {
+            log.warn("Пользоватль с id {} уже добавлен в друзья к указанному пользователю", friendId);
+            throw new DuplicateRequestException("Пользоватль с id " + friendId + " уже добавлен в друзья к указанному пользователю");
+
+        }
+        userStorage.addFriend(id, friendId);
+        log.info("Пользователю с id = {} в друзья добавлен пользователь с id = {}.", id, friendId);
+        return userStorage.getUserById(friendId);
+    }
 //
 //    public User removeFriend(long id, long friendId) {
 //        if (userStorage.getUserById(id) == null) {
@@ -89,13 +94,13 @@ public class UserService {
 //        return userStorage.getUserById(friendId);
 //    }
 //
-//    public Collection<User> getAllFriends(long id) {
-//        if (userStorage.getUserById(id) == null) {
-//            log.warn("Пользователь с id = {} не найден", id);
-//            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
-//        }
-//        return userStorage.getUserById(id).getFriends().stream().map(userStorage::getUserById).toList();
-//    }
+    public Collection<User> getAllFriends(long id) {
+        if (userStorage.getUserById(id) == null) {
+            log.warn("Пользователь с id = {} не найден", id);
+            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
+        }
+        return userStorage.getFriends(id);
+    }
 //
 //    public List<User> getCommonFriends(long id, long otherId) {
 //        if (userStorage.getUserById(id) == null) {

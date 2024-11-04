@@ -30,10 +30,10 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-//    @GetMapping("/{id}/friends")
-//    public Collection<User> getAllFriends(@PathVariable("id") long id) {
-//        return userService.getAllFriends(id);
-//    }
+    @GetMapping("/{id}/friends")
+    public Collection<User> getAllFriends(@PathVariable("id") long id) {
+        return userService.getAllFriends(id);
+    }
 //
 //    @GetMapping("/{id}/friends/common/{otherId}")
 //    public Collection<User> getCommonFriends(@PathVariable("id") long id,
@@ -53,12 +53,12 @@ public class UserController {
         return userService.update(request);
     }
 
-//    @PutMapping("/{id}/friends/{friendId}")
-//    public User addToFriends(@PathVariable("id") long id,
-//                                       @PathVariable("friendId") long friendId) {
-//        log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
-//        return userService.addFriend(id, friendId);
-//    }
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addToFriends(@PathVariable("id") long id,
+                                       @PathVariable("friendId") long friendId) {
+        log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
+        return userService.addFriend(id, friendId);
+    }
 
 //    @DeleteMapping("/{id}/friends/{friendId}")
 //    public User removeFriend(@PathVariable("id") long id,

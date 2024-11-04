@@ -9,9 +9,8 @@ import ru.yandex.practicum.filmorate.exception.InternalServerException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 public class BaseDbStorage<T> {
@@ -28,7 +27,7 @@ public class BaseDbStorage<T> {
         }
     }
 
-    protected List<T> findMany(String query, Object... params) {
+    protected Collection<T> findMany(String query, Object... params) {
         return jdbc.query(query, mapper, params);
     }
 
@@ -53,7 +52,6 @@ public class BaseDbStorage<T> {
                 ps.setObject(idx + 1, params[idx]);
             }
             return ps;}, keyHolder);
-        //long id = keyHolder.getKeyAs(Long.class);
         long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
 
         // Возвращаем id нового пользователя
