@@ -28,7 +28,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
     @Autowired
     public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
-        super(jdbc, mapper, Film.class);
+        super(jdbc, mapper);
     }
 
     @Override

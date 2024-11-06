@@ -16,7 +16,6 @@ import java.util.Objects;
 public class BaseDbStorage<T> {
     protected final JdbcTemplate jdbc;
     protected final RowMapper<T> mapper;
-    private final Class<T> entityType;
 
     protected T findOne(String query, Object... params) {
         try {
@@ -31,8 +30,8 @@ public class BaseDbStorage<T> {
         return jdbc.query(query, mapper, params);
     }
 
-    protected boolean delete(String query, long id) {
-        int rowsDeleted = jdbc.update(query, id);
+    protected boolean delete(String query, long id, long friendId) {
+        int rowsDeleted = jdbc.update(query, id, friendId);
         return rowsDeleted > 0;
     }
 
@@ -59,6 +58,13 @@ public class BaseDbStorage<T> {
             return id;
         } else {
             throw new InternalServerException("Не удалось сохранить данные");
+        }
+    }
+
+    protected void insertSimple(String query, Object... params) {
+        int rowsUpdated = jdbc.update(query, params);
+        if (rowsUpdated == 0) {
+            throw new InternalServerException("Не удалось обновить данные");
         }
     }
 

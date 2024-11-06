@@ -2,24 +2,31 @@ package ru.yandex.practicum.filmorate.service;
 
 import com.sun.jdi.request.DuplicateRequestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.Friend;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.FriendStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Slf4j
 public class UserService {
-    @Qualifier("UserDbStorage")
     private final UserStorage userStorage;
+    private final FriendStorage friendStorage;
 
-    public UserService(UserStorage userStorage) {
+    @Autowired
+    public UserService(UserStorage userStorage, FriendStorage friendStorage) {
         this.userStorage = userStorage;
+        this.friendStorage = friendStorage;
     }
 
     public Collection<User> getAll() {
@@ -31,7 +38,11 @@ public class UserService {
             log.warn("Пользователь с id = {} не найден.", id);
             throw new NotFoundException("Пользователь с id = " + id + " не найден");
         }
-        return userStorage.getUserById(id);
+        User user = userStorage.getUserById(id);
+        Set<Friend> fr = new HashSet<>(friendStorage.getFriendsById(id));
+        user.setFriends(fr);
+
+        return user;
     }
 
     public User create(User user) {
@@ -64,29 +75,36 @@ public class UserService {
             log.warn("Пользователя с id {} нельзя добавить в друзья к самому себе.", id);
             throw new ValidationException("Пользователя с id " + id + " нельзя добавить в друзья к самому себе.");
         }
-        if (userStorage.getFriends(id).contains(userStorage.getUserById(friendId))) {
-            log.warn("Пользоватль с id {} уже добавлен в друзья к указанному пользователю", friendId);
-            throw new DuplicateRequestException("Пользоватль с id " + friendId + " уже добавлен в друзья к указанному пользователю");
-
-        }
+//        if (userStorage.getFriends(id).contains(userStorage.getUserById(friendId))) {
+//            log.warn("Пользоватль с id {} уже добавлен в друзья к указанному пользователю", friendId);
+//            throw new DuplicateRequestException("Пользоватль с id " + friendId + " уже добавлен в друзья к указанному пользователю");
+//
+//        }
         userStorage.addFriend(id, friendId);
         log.info("Пользователю с id = {} в друзья добавлен пользователь с id = {}.", id, friendId);
         return userStorage.getUserById(friendId);
     }
-//
-//    public User removeFriend(long id, long friendId) {
-//        if (userStorage.getUserById(id) == null) {
-//            log.warn("Пользователь с id = {} не найден", id);
-//            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
-//        }
-//        if (userStorage.getUserById(friendId) == null) {
-//            log.warn("Пользователь с id = {}, удаляемый из друзей, не найден", friendId);
-//            throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
-//        }
-//        userStorage.getUserById(id).removeFromFriends(friendId);
-//        userStorage.getUserById(friendId).removeFromFriends(id);
-//        return userStorage.getUserById(friendId);
-//    }
+
+    public User removeFriend(long id, long friendId) {
+        if (userStorage.getUserById(id) == null) {
+            log.warn("Пользователь с id = {} не найден", id);
+            throw new NotFoundException("Пользователь с id=" + id + " не найден.");
+        }
+        if (id == friendId) {
+            log.warn("Пользователя с id {} нельзя удалить из друзей у самого себя.", id);
+            throw new ValidationException("Пользователя с id " + id + " нельзя удалить из друзей у самого себя.");
+        }
+        if(!userStorage.getFriends(id).contains(userStorage.getUserById(friendId))) {
+            log.warn("Пользователя с id = {} нет в списке друзей пользователя {}", friendId, id);
+            throw new NotFoundException("Пользователя с id=" + friendId + " нет в списке друзей пользователя с id=" + id);
+        }
+        if (userStorage.getUserById(friendId) == null) {
+            log.warn("Пользователь с id = {}, удаляемый из друзей, не найден", friendId);
+            throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
+        }
+        userStorage.removeFriend(id, friendId);
+        return userStorage.getUserById(friendId);
+    }
 //
     public Collection<User> getAllFriends(long id) {
         if (userStorage.getUserById(id) == null) {

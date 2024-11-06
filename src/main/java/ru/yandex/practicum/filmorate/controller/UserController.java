@@ -59,12 +59,12 @@ public class UserController {
         return userService.addFriend(id, friendId);
     }
 
-//    @DeleteMapping("/{id}/friends/{friendId}")
-//    public User removeFriend(@PathVariable("id") long id,
-//                                       @PathVariable("friendId") long friendId) {
-//        log.info("Передан id = {} для удаления из друзей пользователя с id = {}", friendId, id);
-//        return userService.removeFriend(id, friendId);
-//    }
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User removeFriend(@PathVariable("id") long id,
+                                       @PathVariable("friendId") long friendId) {
+        log.info("Передан id = {} для удаления из друзей пользователя с id = {}", friendId, id);
+        return userService.removeFriend(id, friendId);
+    }
 
 
 }

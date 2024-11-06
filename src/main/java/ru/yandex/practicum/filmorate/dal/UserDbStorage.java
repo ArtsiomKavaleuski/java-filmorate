@@ -17,19 +17,15 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String INSERT_QUERY = "INSERT INTO users(email, login, name, birthday)" +
             "VALUES (?, ?, ?, ?);";
     private static final String UPDATE_QUERY = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?;";
+    private static final String DELETE_FRIEND_QUERY = "DELETE FROM friends WHERE userId = ? AND friendId = ?;";
     private static final String INSERT_FRIEND_QUERY = "INSERT INTO friends(userId, friendId)" +
             "VALUES (?, ?);";
     private static final String FIND_FRIENDS_QUERY = "SELECT * FROM users WHERE id IN (SELECT friendId FROM friends WHERE userId = ?);";
-
-    //private final FriendsStorage friendsStorage;
-
-    //public UserDbStorage(FriendsStorage friendsStorage) {
-    //    this.friendsStorage = friendsStorage;
-    //}
+    private static final String FIND_FRIENDS_FOR_DISPLAY_QUERY = "SELECT friendId, friendship FROM friends WHERE userId = ?;";
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
-        super(jdbc, mapper, User.class);
+        super(jdbc, mapper);
     }
 
     @Override
@@ -68,22 +64,24 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
         return newUser;
     }
 
-    public long addFriend(long id, long friendId) {
-        insert(
+    public void addFriend(long id, long friendId) {
+        insertSimple(
                 INSERT_FRIEND_QUERY,
                 id,
                 friendId
         );
-//        insert(
-//                INSERT_FRIEND_QUERY,
-//                friendId,
-//                id
-//        );
-        return friendId;
     }
 
     public Collection<User> getFriends(long id) {
         return findMany(FIND_FRIENDS_QUERY, id);
+    }
+
+    public void removeFriend(long id, long friendId) {
+        delete(
+                DELETE_FRIEND_QUERY,
+                id,
+                friendId
+        );
     }
 
 
