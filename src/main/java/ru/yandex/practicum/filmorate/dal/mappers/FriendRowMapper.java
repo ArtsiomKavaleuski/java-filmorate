@@ -12,9 +12,8 @@ public class FriendRowMapper implements RowMapper<Friend> {
     @Override
     public Friend mapRow(ResultSet rs, int numRom) throws SQLException {
         Friend friend = new Friend();
-        friend.setUserId(rs.getInt("userId"));
         friend.setFriendId(rs.getInt("friendId"));
-        friend.setFriendship(rs.getBoolean("friendship"));
+        friend.setReciprocity(rs.getBoolean("reciprocity"));
         return friend;
     }
 }

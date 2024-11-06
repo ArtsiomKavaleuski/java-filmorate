@@ -9,7 +9,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
+import javax.print.DocFlavor;
 import java.util.Collection;
+import java.util.Map;
 
 @Repository
 @Primary
@@ -24,6 +26,9 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     private static final String INSERT_GENRE = "INSERT INTO genres(filmId, genreId)" +
             "VALUES (?, ?);";
     private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?;";
+    private static final String FIND_FILM_GENRES = "SELECT name FROM genres RIGHT JOIN film_genres" +
+            "ON genres.id = film_genres.genreId" +
+            "WHERE film_genres.filmId = ? ORDER BY id;";
 
 
     @Autowired
@@ -33,7 +38,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
     @Override
     public Collection<Film> getAll() {
-        return findMany(FIND_ALL_QUERY);
+       return findMany(FIND_ALL_QUERY);
     }
 
     @Override
@@ -51,14 +56,14 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 newFilm.getDuration()
         );
         newFilm.setId(id);
-        if (newFilm.getMpa() != null) {
-            insert(INSERT_MPA, newFilm.getMpa().getId());
-        }
-        if (!newFilm.getGenres().isEmpty()) {
-            for (Genre genre : newFilm.getGenres()) {
-                insert(INSERT_GENRE, newFilm.getId(), genre.getId());
-            }
-        }
+//        if (newFilm.getMpa() != null) {
+//            insert(INSERT_MPA, newFilm.getMpa().getId());
+//        }
+//        if (!newFilm.getGenres().isEmpty()) {
+//            for (Genre genre : newFilm.getGenres()) {
+//                insert(INSERT_GENRE, newFilm.getId(), genre.getId());
+//            }
+//        }
         return newFilm;
     }
 

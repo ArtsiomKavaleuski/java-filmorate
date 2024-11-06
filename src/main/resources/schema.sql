@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS films (
 CREATE TABLE IF NOT EXISTS friends (
     userId INT NOT NULL,
     friendId INT,
-    friendship BOOLEAN DEFAULT(FALSE),
+    reciprocity BOOLEAN DEFAULT(FALSE),
     FOREIGN KEY (userId) REFERENCES users(id)
     );
 

@@ -39,8 +39,7 @@ public class UserService {
             throw new NotFoundException("Пользователь с id = " + id + " не найден");
         }
         User user = userStorage.getUserById(id);
-        Set<Friend> fr = new HashSet<>(friendStorage.getFriendsById(id));
-        user.setFriends(fr);
+        user.setFriends(new HashSet<>(friendStorage.getFriendsById(id)));
 
         return user;
     }
@@ -80,7 +79,7 @@ public class UserService {
 //            throw new DuplicateRequestException("Пользоватль с id " + friendId + " уже добавлен в друзья к указанному пользователю");
 //
 //        }
-        userStorage.addFriend(id, friendId);
+        friendStorage.addFriend(id, friendId);
         log.info("Пользователю с id = {} в друзья добавлен пользователь с id = {}.", id, friendId);
         return userStorage.getUserById(friendId);
     }
@@ -102,7 +101,7 @@ public class UserService {
             log.warn("Пользователь с id = {}, удаляемый из друзей, не найден", friendId);
             throw new NotFoundException("Пользователь, добавляемый в друзья с id=" + friendId + " не найден.");
         }
-        userStorage.removeFriend(id, friendId);
+        friendStorage.removeFriend(id, friendId);
         return userStorage.getUserById(friendId);
     }
 //
