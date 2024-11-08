@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS film_genres (
     );
 
 CREATE TABLE IF NOT EXISTS likes (
-    userId INT NOT NULL,
 	filmId INT NOT NULL,
+    userId INT NOT NULL,
 	FOREIGN KEY (userId) REFERENCES users(id),
 	FOREIGN KEY (filmId) REFERENCES films(id)
     );

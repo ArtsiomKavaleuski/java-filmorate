@@ -63,4 +63,13 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     public Collection<User> getFriends(long id) {
         return findMany(FIND_FRIENDS_QUERY, id);
     }
+
+    @Override
+    public Collection<User> getCommonFriends(long id, long friendId) {
+        Collection<User> userOneFriends = findMany(FIND_FRIENDS_QUERY, id);
+        Collection<User> userTwoFriends = findMany(FIND_FRIENDS_QUERY, friendId);
+        Collection<User> commonFriends = userOneFriends;
+        commonFriends.retainAll(userTwoFriends);
+        return commonFriends;
+    }
 }

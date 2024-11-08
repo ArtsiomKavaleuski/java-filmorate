@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -8,6 +10,9 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.GenresStorage;
+import ru.yandex.practicum.filmorate.storage.LikeStorage;
+import ru.yandex.practicum.filmorate.storage.MpaStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -15,16 +20,16 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FilmService {
-    @Qualifier("FilmDbStorage")
+    @Autowired
     private final FilmStorage filmStorage;
-//    @Qualifier("UserDbStorage")
-//    private final UserStorage userStorage;
-
-    public FilmService(FilmStorage filmStorage) {
-        this.filmStorage = filmStorage;
-        //this.userStorage = userStorage;
-    }
+    @Autowired
+    private final GenresStorage genresStorage;
+    @Autowired
+    private final MpaStorage mpaStorage;
+    @Autowired
+    private final LikeStorage likeStorage;
 
     public Collection<Film> getAll() {
         return filmStorage.getAll();

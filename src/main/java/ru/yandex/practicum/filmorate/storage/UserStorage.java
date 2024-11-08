@@ -14,4 +14,5 @@ public interface UserStorage {
     User update(User newUser);
 
     Collection<User> getFriends(long id);
+    Collection<User> getCommonFriends(long id, long friendId);
 }
