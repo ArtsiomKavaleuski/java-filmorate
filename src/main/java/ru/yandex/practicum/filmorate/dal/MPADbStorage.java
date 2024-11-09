@@ -13,6 +13,7 @@ import java.util.Collection;
 public class MPADbStorage extends BaseDbStorage<MPA> implements MpaStorage {
     private final String FIND_ALL_MPA_QUERY = "SELECT * FROM mpa;";
     private final String FIND_MPA_BY_ID_QUERY = "SELECT * FROM mpa WHERE id = ?;";
+    private final String FIND_MPA_BY_FILM_QUERY = "SELECT * FROM mpa WHERE id = (SELECT mpa FROM films WHERE id = ?);";
 
     @Autowired
     public MPADbStorage(JdbcTemplate jdbc, RowMapper<MPA> mapper) {
@@ -27,5 +28,10 @@ public class MPADbStorage extends BaseDbStorage<MPA> implements MpaStorage {
     @Override
     public MPA getMpaById(long id) {
         return findOne(FIND_MPA_BY_ID_QUERY, id);
+    }
+
+    @Override
+    public MPA getMpaByFilm(long filmId) {
+        return findOne(FIND_MPA_BY_FILM_QUERY, filmId);
     }
 }

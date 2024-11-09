@@ -24,7 +24,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ErrorResponse handleDuplicateException(final DuplicateException e) {
         return new ErrorResponse("error", e.getMessage());
     }

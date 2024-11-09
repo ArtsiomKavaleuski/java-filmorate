@@ -10,6 +10,8 @@ public interface FilmStorage {
 
     Film getFilmById(long id);
 
+    Film getFilmByGenre(long genreId);
+
     Film create(Film film);
 
     Film update(Film newFilm);

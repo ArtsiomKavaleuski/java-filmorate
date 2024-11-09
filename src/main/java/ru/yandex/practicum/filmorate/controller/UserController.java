@@ -53,10 +53,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addToFriends(@PathVariable("id") long id,
+    public void addToFriends(@PathVariable("id") long id,
                                        @PathVariable("friendId") long friendId) {
         log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
-        return userService.addFriend(id, friendId);
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")

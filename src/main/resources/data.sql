@@ -1,16 +1,19 @@
 DELETE FROM friends;
 
+DELETE FROM film_genres;
+
 DELETE FROM users;
 ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
+
+
+DELETE FROM films;
+ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
 DELETE FROM mpa;
 ALTER TABLE mpa ALTER COLUMN id RESTART WITH 1;
 
 DELETE FROM genres;
 ALTER TABLE genres ALTER COLUMN genreId RESTART WITH 1;
-
-DELETE FROM films;
-ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
 INSERT INTO mpa (name)
 VALUES ('G');
@@ -68,3 +71,15 @@ VALUES ('Avatar', 'alternative universe', '2008-01-02', 120);
 
 INSERT INTO films (name, description, releaseDate, duration)
 VALUES ('Gladiator', 'history about Maximus', '2001-02-20', 110);
+
+INSERT INTO film_genres (filmId, genreId)
+VALUES (1, 6);
+
+INSERT INTO film_genres (filmId, genreId)
+VALUES (1, 3);
+
+INSERT INTO film_genres (filmId, genreId)
+VALUES (2, 4);
+
+INSERT INTO film_genres (filmId, genreId)
+VALUES (3, 5);

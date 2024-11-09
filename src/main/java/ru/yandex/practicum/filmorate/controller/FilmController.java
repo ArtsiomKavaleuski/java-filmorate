@@ -29,6 +29,11 @@ public class FilmController {
         return filmService.getFilmById(id);
     }
 
+//    @GetMapping("/count")
+//    public Film getFilmByGenre(@RequestParam int count) {
+//        return filmService.getFilmByGenre(count);
+//    }
+
 //    @GetMapping("/popular")
 //    public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
 //        return filmService.getSortedLikedFilms(count);

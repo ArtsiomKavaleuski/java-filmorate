@@ -14,7 +14,4 @@ public class User {
     private String name;
     private LocalDate birthday;
     Set<Friend> friends = new HashSet<>();
-    //Map<Long, Boolean> friends = new HashMap<>();
-
-
 }

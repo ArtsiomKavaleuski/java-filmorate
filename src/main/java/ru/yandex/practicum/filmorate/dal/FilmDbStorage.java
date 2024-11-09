@@ -19,16 +19,16 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM films;";
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?;";
-    private static final String INSERT_QUERY = "INSERT INTO films(name, description, releaseDate, duration)" +
-            "VALUES (?, ?, ?, ?);";
+    private static final String INSERT_QUERY = "INSERT INTO films(name, description, releaseDate, duration, mpa)" +
+            "VALUES (?, ?, ?, ?, ?);";
     private static final String INSERT_MPA = "INSERT INTO films(mpa)" +
             "VALUES (?);";
-    private static final String INSERT_GENRE = "INSERT INTO genres(filmId, genreId)" +
+    private static final String INSERT_GENRE = "INSERT INTO film_genres(filmId, genreId)" +
             "VALUES (?, ?);";
-    private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ? WHERE id = ?;";
-    private static final String FIND_FILM_GENRES = "SELECT name FROM genres RIGHT JOIN film_genres" +
-            "ON genres.id = film_genres.genreId" +
-            "WHERE film_genres.filmId = ? ORDER BY id;";
+    private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa = ? WHERE id = ?;";
+    private static final String FIND_FILM_BY_GENRE = "SELECT * FROM films RIGHT JOIN film_genres" +
+            "ON films.id = film_genres.filmId" +
+            "WHERE film_genres.genreId = ?;";
 
 
     @Autowired
@@ -47,23 +47,21 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     }
 
     @Override
+    public Film getFilmByGenre(long genreId) {
+        return findOne(FIND_FILM_BY_GENRE, genreId);
+    }
+
+    @Override
     public Film create(Film newFilm) {
         long id = insert(
                 INSERT_QUERY,
                 newFilm.getName(),
                 newFilm.getDescription(),
                 newFilm.getReleaseDate(),
-                newFilm.getDuration()
+                newFilm.getDuration(),
+                newFilm.getMpa().getId()
         );
         newFilm.setId(id);
-//        if (newFilm.getMpa() != null) {
-//            insert(INSERT_MPA, newFilm.getMpa().getId());
-//        }
-//        if (!newFilm.getGenres().isEmpty()) {
-//            for (Genre genre : newFilm.getGenres()) {
-//                insert(INSERT_GENRE, newFilm.getId(), genre.getId());
-//            }
-//        }
         return newFilm;
     }
 
@@ -75,6 +73,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
                 newFilm.getDescription(),
                 newFilm.getReleaseDate(),
                 newFilm.getDuration(),
+                newFilm.getMpa().getId(),
                 newFilm.getId()
         );
         return newFilm;

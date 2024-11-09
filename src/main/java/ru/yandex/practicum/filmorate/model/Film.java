@@ -17,11 +17,8 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     private long duration;
     MPA mpa = new MPA();
-
-    //private long mpa;
-    //private Set<MPA> mpa = new HashSet<>();
     private Set<Genre> genres = new HashSet<>();
-    private Set<Long> likes = new HashSet<>();
+    private Set<Like> likes = new HashSet<>();
 
     @Override
     public int compareTo(Film film) {
