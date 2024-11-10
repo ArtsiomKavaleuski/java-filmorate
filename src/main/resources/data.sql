@@ -2,9 +2,10 @@ DELETE FROM friends;
 
 DELETE FROM film_genres;
 
+DELETE FROM likes;
+
 DELETE FROM users;
 ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
-
 
 DELETE FROM films;
 ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
@@ -60,26 +61,44 @@ VALUES ('vitushko@bff.by', 'sd', 'Siarhei', '1945-07-13');
 INSERT INTO users (email, login, name, birthday)
 VALUES ('tsapliuk@bff.by', 'tsapliuk', 'Ihar', '1968-11-03');
 
-INSERT INTO films (name, description, releaseDate, duration)
-VALUES ('Interstellar', 'Space odissey', '2018-01-02', 130);
+INSERT INTO films (name, description, releaseDate, duration, mpa)
+VALUES ('Interstellar', 'Space odissey', '2018-01-02', 130, 2);
 
-INSERT INTO films (name, description, releaseDate, duration)
-VALUES ('Interstellar', 'Space odissey', '2018-01-02', 130);
+INSERT INTO films (name, description, releaseDate, duration, mpa)
+VALUES ('Avatar', 'alternative universe', '2008-01-02', 120, 1);
 
-INSERT INTO films (name, description, releaseDate, duration)
-VALUES ('Avatar', 'alternative universe', '2008-01-02', 120);
+INSERT INTO films (name, description, releaseDate, duration, mpa)
+VALUES ('Gladiator', 'history about Maximus', '2001-02-20', 110, 4);
 
-INSERT INTO films (name, description, releaseDate, duration)
-VALUES ('Gladiator', 'history about Maximus', '2001-02-20', 110);
+INSERT INTO film_genres (filmId, genreId)
+VALUES (1, 2);
 
 INSERT INTO film_genres (filmId, genreId)
 VALUES (1, 6);
 
 INSERT INTO film_genres (filmId, genreId)
-VALUES (1, 3);
+VALUES (2, 2);
 
 INSERT INTO film_genres (filmId, genreId)
-VALUES (2, 4);
+VALUES (3, 6);
 
 INSERT INTO film_genres (filmId, genreId)
-VALUES (3, 5);
+VALUES (3, 2);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (1, 1);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (1, 2);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (2, 1);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (2, 2);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (2, 3);
+
+INSERT INTO filmorate.likes (filmId, userId)
+VALUES (3, 1);

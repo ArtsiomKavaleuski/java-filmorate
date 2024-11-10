@@ -11,9 +11,9 @@ import java.util.Collection;
 
 @Repository
 public class MPADbStorage extends BaseDbStorage<MPA> implements MpaStorage {
-    private final String FIND_ALL_MPA_QUERY = "SELECT * FROM mpa;";
-    private final String FIND_MPA_BY_ID_QUERY = "SELECT * FROM mpa WHERE id = ?;";
-    private final String FIND_MPA_BY_FILM_QUERY = "SELECT * FROM mpa WHERE id = (SELECT mpa FROM films WHERE id = ?);";
+    private final String FIND_ALL_MPA_QUERY = "SELECT * FROM filmorate.mpa;";
+    private final String FIND_MPA_BY_ID_QUERY = "SELECT * FROM filmorate.mpa WHERE id = ?;";
+    private final String FIND_MPA_BY_FILM_QUERY = "SELECT * FROM filmorate.mpa WHERE id = (SELECT mpa FROM films WHERE id = ?);";
 
     @Autowired
     public MPADbStorage(JdbcTemplate jdbc, RowMapper<MPA> mapper) {

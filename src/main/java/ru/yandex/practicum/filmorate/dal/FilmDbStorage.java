@@ -17,19 +17,14 @@ import java.util.Map;
 @Primary
 public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
 
-    private static final String FIND_ALL_QUERY = "SELECT * FROM films;";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM films WHERE id = ?;";
-    private static final String INSERT_QUERY = "INSERT INTO films(name, description, releaseDate, duration, mpa)" +
+    private static final String FIND_ALL_QUERY = "SELECT * FROM filmorate.films;";
+    private static final String FIND_BY_ID_QUERY = "SELECT * FROM filmorate.films WHERE id = ?;";
+    private static final String INSERT_QUERY = "INSERT INTO filmorate.films(name, description, releaseDate, duration, mpa)" +
             "VALUES (?, ?, ?, ?, ?);";
-    private static final String INSERT_MPA = "INSERT INTO films(mpa)" +
-            "VALUES (?);";
-    private static final String INSERT_GENRE = "INSERT INTO film_genres(filmId, genreId)" +
-            "VALUES (?, ?);";
-    private static final String UPDATE_QUERY = "UPDATE films SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa = ? WHERE id = ?;";
-    private static final String FIND_FILM_BY_GENRE = "SELECT * FROM films RIGHT JOIN film_genres" +
-            "ON films.id = film_genres.filmId" +
-            "WHERE film_genres.genreId = ?;";
-
+    private static final String UPDATE_QUERY = "UPDATE filmorate.films SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa = ? WHERE id = ?;";
+    private static final String FIND_POPULAR_FILMS_QUERY = "SELECT f.id, f.name, f.description, f.releaseDate, " +
+            "f.duration, f.mpa, count(l.userId) AS likes FROM FILMORATE.FILMS f " +
+            "LEFT JOIN FILMORATE.LIKES l ON f.ID = l.FILMID GROUP BY f.id ORDER BY likes DESC LIMIT ?;";
 
     @Autowired
     public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
@@ -42,14 +37,17 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     }
 
     @Override
+    public Collection<Film> getAll(int count) {return findMany(FIND_POPULAR_FILMS_QUERY, count);}
+
+    @Override
     public Film getFilmById(long id) {
         return findOne(FIND_BY_ID_QUERY, id);
     }
 
-    @Override
-    public Film getFilmByGenre(long genreId) {
-        return findOne(FIND_FILM_BY_GENRE, genreId);
-    }
+//    @Override
+//    public Film getFilmByGenre(long genreId) {
+//        return findOne(FIND_FILM_BY_GENRE, genreId);
+//    }
 
     @Override
     public Film create(Film newFilm) {

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Like;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
@@ -34,10 +35,10 @@ public class FilmController {
 //        return filmService.getFilmByGenre(count);
 //    }
 
-//    @GetMapping("/popular")
-//    public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
-//        return filmService.getSortedLikedFilms(count);
-//    }
+    @GetMapping("/popular")
+    public Collection<Film> getPopularFilms(@RequestParam(defaultValue = "10") int count) {
+        return filmService.getSortedLikedFilms(count);
+    }
 
     @PostMapping
     public Film create(@RequestBody Film film) {
@@ -51,17 +52,17 @@ public class FilmController {
         return filmService.update(newFilm);
     }
 
-//    @PutMapping("/{id}/like/{userId}")
-//    public void addLikeToFilm(@PathVariable("id") long id, @PathVariable("userId") long userId) {
-//        log.info("Передан id = {} пользователя для добавления лайка фильму с id = {}", userId, id);
-//        filmService.addLikeToFilm(id, userId);
-//    }
-//
-//    @DeleteMapping("/{id}/like/{userId}")
-//    public void removeLikeFromFilm(@PathVariable("id") long id, @PathVariable("userId") long userId) {
-//        log.info("Передан id = {} пользователя для удаления его лайка фильму с id = {}", userId, id);
-//        filmService.removeLikeFromFilm(id, userId);
-//    }
+    @PutMapping("/{filmId}/like/{id}")
+    public Like addLikeToFilm(@PathVariable("filmId") long filmId, @PathVariable("id") long id) {
+        log.info("Передан id = {} пользователя для добавления лайка фильму с id = {}", id, filmId);
+        return filmService.addLikeToFilm(filmId, id);
+    }
+
+    @DeleteMapping("/{filmId}/like/{id}")
+    public Like removeLikeFromFilm(@PathVariable("filmId") long filmId, @PathVariable("id") long id) {
+        log.info("Передан id = {} пользователя для удаления его лайка фильму с id = {}", id, filmId);
+        return filmService.removeLikeFromFilm(filmId, id);
+    }
 
 
 }

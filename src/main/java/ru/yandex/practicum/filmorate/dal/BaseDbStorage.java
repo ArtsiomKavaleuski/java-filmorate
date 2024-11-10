@@ -30,8 +30,8 @@ public class BaseDbStorage<T> {
         return jdbc.query(query, mapper, params);
     }
 
-    protected boolean delete(String query, long id, long friendId) {
-        int rowsDeleted = jdbc.update(query, id, friendId);
+    protected boolean delete(String query, Object... params) {
+        int rowsDeleted = jdbc.update(query, params);
         return rowsDeleted > 0;
     }
 

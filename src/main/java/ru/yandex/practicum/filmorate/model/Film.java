@@ -18,10 +18,10 @@ public class Film implements Comparable<Film> {
     private long duration;
     MPA mpa = new MPA();
     private Set<Genre> genres = new HashSet<>();
-    private Set<Like> likes = new HashSet<>();
+    private long likes;
 
     @Override
     public int compareTo(Film film) {
-        return film.likes.size() - this.likes.size();
+        return (int) film.likes - (int) this.likes;
     }
 }

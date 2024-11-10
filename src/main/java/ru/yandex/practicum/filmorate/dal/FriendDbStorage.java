@@ -12,10 +12,10 @@ import java.util.Collection;
 
 @Repository
 public class FriendDbStorage extends BaseDbStorage<Friend> implements FriendStorage {
-    private static final String FIND_ALL_MPA_QUERY = "SELECT * FROM friends;";
-    private static final String FIND_FRIEND_BY_ID_QUERY = "SELECT * FROM friends WHERE userId = ?;";
-    private static final String DELETE_FRIEND_QUERY = "DELETE FROM friends WHERE userId = ? AND friendId = ?;";
-    private static final String INSERT_FRIEND_QUERY = "INSERT INTO friends(userId, friendId) VALUES (?, ?);";
+    private static final String FIND_ALL_MPA_QUERY = "SELECT * FROM filmorate.friends;";
+    private static final String FIND_FRIEND_BY_ID_QUERY = "SELECT * FROM filmorate.friends WHERE userId = ?;";
+    private static final String DELETE_FRIEND_QUERY = "DELETE FROM filmorate.friends WHERE userId = ? AND friendId = ?;";
+    private static final String INSERT_FRIEND_QUERY = "INSERT INTO filmorate.friends(userId, friendId) VALUES (?, ?);";
 
     @Autowired
     public FriendDbStorage(JdbcTemplate jdbc, RowMapper<Friend> mapper) {

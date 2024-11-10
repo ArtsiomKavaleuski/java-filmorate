@@ -104,7 +104,8 @@ public class UserService {
             log.warn("Пользователь с id = {} не найден", id);
             throw new NotFoundException("Пользователь с id=" + id + " не найден.");
         }
-        return fillFriends(userStorage.getFriends(id));
+        //return fillFriends(userStorage.getFriends(id));
+        return userStorage.getFriends(id);
     }
 
     public Collection<User> getCommonFriends(long id, long friendId) {
