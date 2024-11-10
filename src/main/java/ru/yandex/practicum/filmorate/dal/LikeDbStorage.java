@@ -24,29 +24,21 @@ public class LikeDbStorage extends BaseDbStorage<Like> implements LikeStorage {
     }
 
     @Override
-    public Like addLike(long filmId, long userId) {
+    public void addLike(long filmId, long userId) {
         update(
                 INSERT_LIKE_QUERY,
                 filmId,
                 userId
         );
-        Like like = new Like();
-        like.setFilmId(filmId);
-        like.setUserId(userId);
-        return like;
     }
 
     @Override
-    public Like removeLike(long filmId, long userId) {
+    public void removeLike(long filmId, long userId) {
         delete(
                 DELETE_LIKE_QUERY,
                 filmId,
                 userId
         );
-        Like like = new Like();
-        like.setFilmId(filmId);
-        like.setUserId(userId);
-        return like;
     }
 
     @Override

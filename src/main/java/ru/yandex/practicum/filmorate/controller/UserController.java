@@ -17,11 +17,6 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-//    @Autowired
-//    public UserController(UserService userService) {
-//        this.userService = userService;
-//    }
-
     @GetMapping
     public Collection<User> getAll() {
         return userService.getAll();
@@ -38,8 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends/common/{friendId}")
-    public Collection<User> getCommonFriends(@PathVariable("id") long id,
-                                             @PathVariable("friendId") long friendId) {
+    public Collection<User> getCommonFriends(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         return userService.getCommonFriends(id, friendId);
     }
 
@@ -56,18 +50,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public void addToFriends(@PathVariable("id") long id,
-                                       @PathVariable("friendId") long friendId) {
+    public void addToFriends(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
         userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User removeFriend(@PathVariable("id") long id,
-                                       @PathVariable("friendId") long friendId) {
+    public void removeFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         log.info("Передан id = {} для удаления из друзей пользователя с id = {}", friendId, id);
-        return userService.removeFriend(id, friendId);
+        userService.removeFriend(id, friendId);
     }
-
-
 }

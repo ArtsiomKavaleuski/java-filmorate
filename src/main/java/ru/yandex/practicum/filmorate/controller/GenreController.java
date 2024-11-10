@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +13,12 @@ import ru.yandex.practicum.filmorate.service.GenreService;
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/genres")
 @Slf4j
 public class GenreController {
-    private final GenreService genreService;
-
     @Autowired
-    public GenreController(GenreService genreService) {
-        this.genreService = genreService;
-    }
+    private final GenreService genreService;
 
     @GetMapping
     public Collection<Genre> getAll() {

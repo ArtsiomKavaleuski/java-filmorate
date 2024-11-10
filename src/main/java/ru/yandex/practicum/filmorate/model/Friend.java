@@ -7,5 +7,3 @@ public class Friend {
     private long friendId;
     private Boolean reciprocity;
 }
-
-

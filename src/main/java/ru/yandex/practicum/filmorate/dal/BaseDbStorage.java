@@ -52,21 +52,10 @@ public class BaseDbStorage<T> {
             }
             return ps;}, keyHolder);
         long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
-
-        // Возвращаем id нового пользователя
         if (keyHolder.getKey() != null) {
             return id;
         } else {
             throw new InternalServerException("Не удалось сохранить данные");
         }
     }
-
-    protected void insertSimple(String query, Object... params) {
-        int rowsUpdated = jdbc.update(query, params);
-        if (rowsUpdated == 0) {
-            throw new InternalServerException("Не удалось обновить данные");
-        }
-    }
-
-
 }

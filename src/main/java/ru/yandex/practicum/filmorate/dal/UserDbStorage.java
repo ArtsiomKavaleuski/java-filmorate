@@ -16,8 +16,10 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM filmorate.users WHERE id = ?;";
     private static final String INSERT_QUERY = "INSERT INTO filmorate.users(email, login, name, birthday)" +
             "VALUES (?, ?, ?, ?);";
-    private static final String UPDATE_QUERY = "UPDATE filmorate.users SET email = ?, login = ?, name = ?, birthday = ? WHERE id = ?;";
-    private static final String FIND_FRIENDS_QUERY = "SELECT * FROM filmorate.users WHERE id IN (SELECT friendId FROM filmorate.friends WHERE userId = ?);";
+    private static final String UPDATE_QUERY = "UPDATE filmorate.users SET email = ?, login = ?, name = ?, birthday = ? " +
+            "WHERE id = ?;";
+    private static final String FIND_FRIENDS_QUERY = "SELECT * FROM filmorate.users " +
+            "WHERE id IN (SELECT friendId FROM filmorate.friends WHERE userId = ?);";
 
     @Autowired
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
