@@ -1,6 +1,6 @@
 DELETE FROM friends;
 
-DELETE FROM film_genres;
+DELETE FROM filmGenres;
 
 DELETE FROM likes;
 
@@ -70,19 +70,19 @@ VALUES ('Avatar', 'alternative universe', '2008-01-02', 120, 1);
 INSERT INTO films (name, description, releaseDate, duration, mpa)
 VALUES ('Gladiator', 'history about Maximus', '2001-02-20', 110, 4);
 
-INSERT INTO film_genres (filmId, genreId)
+INSERT INTO filmGenres (filmId, genreId)
 VALUES (1, 2);
 
-INSERT INTO film_genres (filmId, genreId)
+INSERT INTO filmGenres (filmId, genreId)
 VALUES (1, 6);
 
-INSERT INTO film_genres (filmId, genreId)
+INSERT INTO filmGenres (filmId, genreId)
 VALUES (2, 2);
 
-INSERT INTO film_genres (filmId, genreId)
+INSERT INTO filmGenres (filmId, genreId)
 VALUES (3, 6);
 
-INSERT INTO film_genres (filmId, genreId)
+INSERT INTO filmGenres (filmId, genreId)
 VALUES (3, 2);
 
 INSERT INTO filmorate.likes (filmId, userId)

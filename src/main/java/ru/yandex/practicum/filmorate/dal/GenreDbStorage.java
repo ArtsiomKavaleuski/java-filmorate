@@ -14,10 +14,10 @@ public class GenreDbStorage extends BaseDbStorage<Genre> implements GenreStorage
 
     private static final String FIND_ALL_GENRES_QUERY = "SELECT * FROM filmorate.genres;";
     private static final String FIND_GENRE_BY_ID_QUERY = "SELECT * FROM filmorate.genres WHERE genreId = ?;";
-    private static final String INSERT_FILM_GENRES_QUERY = "INSERT INTO filmorate.film_genres(filmId, genreId) VALUES(?, ?);";
-    private static final String FIND_FILM_GENRES_QUERY = "SELECT genres.genreId, genres.genreName FROM filmorate.genres " +
-            "RIGHT JOIN film_genres ON genres.genreId = film_genres.genreId " +
-            "WHERE film_genres.filmId = ?;";
+    private static final String INSERT_FILM_GENRES_QUERY = "INSERT INTO filmorate.filmGenres(filmId, genreId) VALUES(?, ?);";
+    private static final String FIND_FILM_GENRES_QUERY = "SELECT g.genreId, g.genreName FROM filmorate.genres AS g " +
+            "RIGHT JOIN filmorate.filmGenres AS fg ON g.genreId = fg.genreId " +
+            "WHERE fg.filmId = ?;";
 
     @Autowired
     public GenreDbStorage(JdbcTemplate jdbc, RowMapper<Genre> mapper) {

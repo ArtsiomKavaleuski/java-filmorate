@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS genres (
     genreName VARCHAR(20)
     );
 
-CREATE TABLE IF NOT EXISTS film_genres (
+CREATE TABLE IF NOT EXISTS filmGenres (
     filmId INT NOT NULL,
     genreId INT NOT NULL,
     FOREIGN KEY (genreId) REFERENCES genres(genreId),
