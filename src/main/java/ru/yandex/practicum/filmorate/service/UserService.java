@@ -54,15 +54,16 @@ public class UserService {
     public void addFriend(long id, long friendId) {
         checkUserNotFound(id);
         checkUserNotFound(friendId);
-        checkUserAndFriendIds(id, friendId);
+        checkIds(id, friendId);
         for(User user : userStorage.getFriends(id)) {
             if(user.equals(userStorage.getUserById(friendId))) {
                 log.warn("Пользоватль с id {} уже добавлен в друзья к указанному пользователю", friendId);
-                throw new DuplicateException("Пользоватль с id " + friendId + " уже добавлен в друзья к указанному пользователю");
+                throw new DuplicateException("Пользоватль с id " + friendId + " уже добавлен в друзья");
             }
         }
         friendStorage.addFriend(id, friendId);
-        if(!friendStorage.getFriendsById(friendId).isEmpty() && friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
+        if(!friendStorage.getFriendsById(friendId).isEmpty()
+                && friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
             friendStorage.updateReciprocity(id, friendId, Boolean.TRUE);
             friendStorage.updateReciprocity(friendId, id, Boolean.TRUE);
         }
@@ -72,7 +73,7 @@ public class UserService {
     public void removeFriend(long id, long friendId) {
         checkUserNotFound(id);
         checkUserNotFound(friendId);
-        checkUserAndFriendIds(id, friendId);
+        checkIds(id, friendId);
         friendStorage.removeFriend(id, friendId);
         if(friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
             friendStorage.updateReciprocity(friendId, id, Boolean.FALSE);
@@ -88,7 +89,7 @@ public class UserService {
     public Collection<User> getCommonFriends(long id, long friendId) {
         checkUserNotFound(id);
         checkUserNotFound(friendId);
-        checkUserAndFriendIds(id, friendId);
+        checkIds(id, friendId);
         return fillFriends(userStorage.getCommonFriends(id, friendId));
     }
 
@@ -125,7 +126,7 @@ public class UserService {
         }
     }
 
-    private void checkUserAndFriendIds(long id, long friendId) {
+    private void checkIds(long id, long friendId) {
         if (id == friendId) {
             log.warn("Введен один и тот же id = {}.", id);
             throw new NotFoundException("Введен один и тот же id.");
