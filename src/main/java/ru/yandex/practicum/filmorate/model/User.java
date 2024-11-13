@@ -19,10 +19,10 @@ public class User {
     private LocalDate birthday;
     Set<Friend> friends = new HashSet<>();
 
-    public User(long id, String email, String login, String name) {
-        this.id = id;
+    public User(String email, String login, String name, LocalDate birthday) {
         this.email = email;
         this.login = login;
         this.name = name;
+        this.birthday = birthday;
     }
 }

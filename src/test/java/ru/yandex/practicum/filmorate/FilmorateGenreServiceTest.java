@@ -26,6 +26,11 @@ public class FilmorateGenreServiceTest {
     @Test
     public void shouldReturnGenreWithId1() {
         Assertions.assertEquals(comedy, genreService.getGenreById(1));
+        Assertions.assertEquals(drama, genreService.getGenreById(2));
+        Assertions.assertEquals(cartoon, genreService.getGenreById(3));
+        Assertions.assertEquals(thriller, genreService.getGenreById(4));
+        Assertions.assertEquals(doc, genreService.getGenreById(5));
+        Assertions.assertEquals(action, genreService.getGenreById(6));
     }
 
     @Test
@@ -42,5 +47,6 @@ public class FilmorateGenreServiceTest {
             Assertions.assertTrue(genreService.getAll().contains(thriller));
             Assertions.assertTrue(genreService.getAll().contains(doc));
             Assertions.assertTrue(genreService.getAll().contains(action));
+            Assertions.assertTrue(genreService.getAll().size() == 6);
     }
 }
