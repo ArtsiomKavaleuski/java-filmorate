@@ -55,14 +55,14 @@ public class UserService {
         checkUserNotFound(id);
         checkUserNotFound(friendId);
         checkIds(id, friendId);
-        for(User user : userStorage.getFriends(id)) {
-            if(user.equals(userStorage.getUserById(friendId))) {
+        for (User user : userStorage.getFriends(id)) {
+            if (user.equals(userStorage.getUserById(friendId))) {
                 log.warn("Пользоватль с id {} уже добавлен в друзья к указанному пользователю", friendId);
                 throw new DuplicateException("Пользоватль с id " + friendId + " уже добавлен в друзья");
             }
         }
         friendStorage.addFriend(id, friendId);
-        if(!friendStorage.getFriendsById(friendId).isEmpty()
+        if (!friendStorage.getFriendsById(friendId).isEmpty()
                 && friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
             friendStorage.updateReciprocity(id, friendId, Boolean.TRUE);
             friendStorage.updateReciprocity(friendId, id, Boolean.TRUE);
@@ -75,7 +75,7 @@ public class UserService {
         checkUserNotFound(friendId);
         checkIds(id, friendId);
         friendStorage.removeFriend(id, friendId);
-        if(friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
+        if (friendStorage.getFriendsById(friendId).stream().anyMatch(f -> f.getFriendId() == id)) {
             friendStorage.updateReciprocity(friendId, id, Boolean.FALSE);
         }
         log.info("Из друзей пользователя с id = {} удален пользователь с id = {}.", id, friendId);
@@ -94,7 +94,7 @@ public class UserService {
     }
 
     private Collection<User> fillFriends(Collection<User> users) {
-        for(User user : users) {
+        for (User user : users) {
             user.setFriends(new HashSet<>(friendStorage.getFriendsById(user.getId())));
         }
         return users;

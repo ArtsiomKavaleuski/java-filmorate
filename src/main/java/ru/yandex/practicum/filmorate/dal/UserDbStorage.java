@@ -24,14 +24,17 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
     public UserDbStorage(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
     }
+
     @Override
     public Collection<User> getAll() {
         return findMany(FIND_ALL_QUERY);
     }
+
     @Override
     public User getUserById(long id) {
         return findOne(FIND_BY_ID_QUERY, id);
     }
+
     @Override
     public User create(User user) {
         long id = insert(
@@ -44,6 +47,7 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
         user.setId(id);
         return user;
     }
+
     @Override
     public User update(User newUser) {
         update(
@@ -53,9 +57,10 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
                 newUser.getName(),
                 newUser.getBirthday(),
                 newUser.getId()
-                );
+        );
         return newUser;
     }
+
     @Override
     public Collection<User> getFriends(long id) {
         return findMany(FIND_FRIENDS_QUERY, id);

@@ -50,7 +50,8 @@ public class BaseDbStorage<T> {
             for (int idx = 0; idx < params.length; idx++) {
                 ps.setObject(idx + 1, params[idx]);
             }
-            return ps;}, keyHolder);
+            return ps;
+        }, keyHolder);
         long id = Objects.requireNonNull(keyHolder.getKey()).longValue();
         if (keyHolder.getKey() != null) {
             return id;

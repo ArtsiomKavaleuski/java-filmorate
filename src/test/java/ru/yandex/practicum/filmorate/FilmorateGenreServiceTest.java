@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,7 @@ import ru.yandex.practicum.filmorate.service.GenreService;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmorateGenreServiceTest {
     private final GenreService genreService;
+
     private final Genre comedy = new Genre(1, "Комедия");
     private final Genre drama = new Genre(2, "Драма");
     private final Genre cartoon = new Genre(3, "Мультфильм");
@@ -35,18 +35,19 @@ public class FilmorateGenreServiceTest {
 
     @Test
     public void shouldThrowNotFoundExceptionWhenGenreIdDoesntExists() {
-        Assertions.assertThrows(NotFoundException.class,
-                () -> genreService.getGenreById(134));
+        Assertions.assertThrows(NotFoundException.class, () -> genreService.getGenreById(134));
+        Assertions.assertThrows(NotFoundException.class, () -> genreService.getGenreById(0));
+        Assertions.assertThrows(NotFoundException.class, () -> genreService.getGenreById(7));
     }
 
     @Test
     public void shouldReturnCollectionOfGenresWithAllGenres() {
-            Assertions.assertTrue(genreService.getAll().contains(comedy));
-            Assertions.assertTrue(genreService.getAll().contains(drama));
-            Assertions.assertTrue(genreService.getAll().contains(cartoon));
-            Assertions.assertTrue(genreService.getAll().contains(thriller));
-            Assertions.assertTrue(genreService.getAll().contains(doc));
-            Assertions.assertTrue(genreService.getAll().contains(action));
-            Assertions.assertTrue(genreService.getAll().size() == 6);
+        Assertions.assertTrue(genreService.getAll().contains(comedy));
+        Assertions.assertTrue(genreService.getAll().contains(drama));
+        Assertions.assertTrue(genreService.getAll().contains(cartoon));
+        Assertions.assertTrue(genreService.getAll().contains(thriller));
+        Assertions.assertTrue(genreService.getAll().contains(doc));
+        Assertions.assertTrue(genreService.getAll().contains(action));
+        Assertions.assertEquals(6, genreService.getAll().size());
     }
 }

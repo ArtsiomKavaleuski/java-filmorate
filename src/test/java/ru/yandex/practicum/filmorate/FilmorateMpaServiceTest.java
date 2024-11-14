@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate;
 
-
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,12 +15,12 @@ import ru.yandex.practicum.filmorate.service.MpaService;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FilmorateMpaServiceTest {
     private final MpaService mpaService;
+    //уже существующие рейтинги MPA, добавлены в БД через файл data.sql
     private final MPA G = new MPA(1, "G");
     private final MPA PG = new MPA(2, "PG");
     private final MPA PG13 = new MPA(3, "PG-13");
     private final MPA R = new MPA(4, "R");
     private final MPA NC17 = new MPA(5, "NC-17");
-
 
     @Test
     public void shouldReturnCorrectGenre() {
@@ -34,8 +33,9 @@ public class FilmorateMpaServiceTest {
 
     @Test
     public void shouldThrowNotFoundExceptionWhenGetGenreByIncorrectId() {
-        Assertions.assertThrows(NotFoundException.class,
-                () -> mpaService.getMpaById(134));
+        Assertions.assertThrows(NotFoundException.class, () -> mpaService.getMpaById(134));
+        Assertions.assertThrows(NotFoundException.class, () -> mpaService.getMpaById(0));
+        Assertions.assertThrows(NotFoundException.class, () -> mpaService.getMpaById(6));
     }
 
     @Test
@@ -45,6 +45,6 @@ public class FilmorateMpaServiceTest {
         Assertions.assertTrue(mpaService.getAll().contains(PG13));
         Assertions.assertTrue(mpaService.getAll().contains(R));
         Assertions.assertTrue(mpaService.getAll().contains(NC17));
-        Assertions.assertTrue(mpaService.getAll().size() == 5);
+        Assertions.assertEquals(5, mpaService.getAll().size());
     }
 }

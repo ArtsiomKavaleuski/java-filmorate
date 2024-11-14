@@ -95,7 +95,7 @@ public class FilmService {
             Set<Genre> filmGenres = new TreeSet<>(genreStorage.getGenresByFilm(film.getId()));
             film.setGenres(filmGenres);
         }
-        if(likeStorage.getLikesByFilm(film.getId()) != null) {
+        if (likeStorage.getLikesByFilm(film.getId()) != null) {
             film.setLikes(likeStorage.getLikesByFilm(film.getId()).size());
         }
         return film;
@@ -112,7 +112,7 @@ public class FilmService {
                 Set<Genre> filmGenres = new TreeSet<>(genreStorage.getGenresByFilm(film.getId()));
                 film.setGenres(filmGenres);
             }
-            if(likeStorage.getLikesByFilm(film.getId()) != null) {
+            if (likeStorage.getLikesByFilm(film.getId()) != null) {
                 film.setLikes(likeStorage.getLikesByFilm(film.getId()).size());
             }
             updatedFilms.add(film);
@@ -126,19 +126,23 @@ public class FilmService {
             throw new ValidationException("Название не может быть пустым");
         }
         if (film.getDescription().length() > 200) {
-            log.warn("Введенное описание фильма содержит {} из 200 возможных символов", film.getDescription().length());
+            log.warn("Введенное описание фильма содержит {} из 200 возможных символов",
+                    film.getDescription().length());
             throw new ValidationException("Максимальная длина описания - 200 символов");
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            log.warn("Введенная дата релиза {} фильма не может быть раньше 28 декабря 1895 года", film.getReleaseDate());
+            log.warn("Введенная дата релиза {} фильма не может быть раньше 28 декабря 1895 года",
+                    film.getReleaseDate());
             throw new ValidationException("Дата релиза - не раньше 28 декабря 1895 года");
         }
         if (film.getDuration() < 0) {
-            log.warn("Введенная продолжительность {} фильма не является положительным числом", film.getDuration());
+            log.warn("Введенная продолжительность {} фильма не является положительным числом",
+                    film.getDuration());
             throw new ValidationException("продолжительность фильма должна быть положительным числом");
         }
         if (film.getMpa().getId() < 1 || film.getMpa().getId() > 5) {
-            log.warn("Индекс введенного MPA {} не существует", film.getMpa().getId());
+            log.warn("Индекс введенного MPA {} не существует",
+                    film.getMpa().getId());
             throw new ValidationException("Индекс введенного MPA не существует");
         }
         for (Genre genre : film.getGenres()) {

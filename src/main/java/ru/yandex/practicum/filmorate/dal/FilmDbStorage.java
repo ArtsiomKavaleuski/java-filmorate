@@ -25,18 +25,22 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
     public FilmDbStorage(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
     }
+
     @Override
     public Collection<Film> getAll() {
-       return findMany(FIND_ALL_QUERY);
+        return findMany(FIND_ALL_QUERY);
     }
+
     @Override
     public Collection<Film> getAll(int count) {
         return findMany(FIND_POPULAR_FILMS_QUERY, count);
     }
+
     @Override
     public Film getFilmById(long id) {
         return findOne(FIND_BY_ID_QUERY, id);
     }
+
     @Override
     public Film create(Film newFilm) {
         long id = insert(
@@ -50,6 +54,7 @@ public class FilmDbStorage extends BaseDbStorage<Film> implements FilmStorage {
         newFilm.setId(id);
         return newFilm;
     }
+
     @Override
     public Film update(Film newFilm) {
         update(

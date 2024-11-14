@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.HashSet;
 
 @SpringBootTest
 @AutoConfigureTestDatabase
@@ -24,24 +24,37 @@ import java.util.Set;
 public class FilmorateFilmServiceTest {
     private final FilmService filmService;
     private final UserService userService;
+    //уже существующие фильмы, добавлены в БД через файл data.sql
     private final Film interstellar = new Film(1, "Interstellar", "Space odissey",
-            LocalDate.of(2018,1,2), 130, new MPA(2, "PG"),
-            Set.of(new Genre(2, "Драма"), new Genre(6, "Боевик")), 2);
+            LocalDate.of(2018, 1, 2), 130,
+            new MPA(2, "PG"), new HashSet<>(), 0);
     private final Film avatar = new Film(2, "Avatar", "alternative universe",
-            LocalDate.of(2008,1,2), 120, new MPA(1, "G"),
-            Set.of(new Genre(2, "Драма")), 3);
+            LocalDate.of(2008, 1, 2), 120,
+            new MPA(1, "G"), new HashSet<>(), 0);
     private final Film gladiator = new Film(3, "Gladiator", "history about Maximus",
-            LocalDate.of(2001,2,20), 110, new MPA(4, "R"),
-            Set.of(new Genre(2, "Драма"), new Genre(6, "Боевик")), 1);
+            LocalDate.of(2001, 2, 20), 110,
+            new MPA(4, "R"), new HashSet<>(), 0);
 
-//    @AfterEach
-//    public void afterEach() {
-//
-//    }
+    private Film getRandomFilm() {
+        String name = RandomString.make(7);
+        String description = RandomString.make(7);
+        LocalDate releaseDate = LocalDate.of(2000, 1, 1);
+        long duration = 150;
+        MPA mpa = new MPA(1, "G");
+        return new Film(name, description, releaseDate, duration, mpa);
+    }
+
+    private User getRandomUser() {
+        String email = RandomString.make(7) + "@gmail.com";
+        String login = RandomString.make(7);
+        String name = RandomString.make(7);
+        LocalDate birthday = LocalDate.of(2000, 1, 1);
+        return new User(email, login, name, birthday);
+    }
 
     @Test
     public void shouldReturnCorrectFilm() {
-        Assertions.assertEquals(interstellar, filmService.getFilmById(1));
+        Assertions.assertEquals(interstellar, filmService.getFilmById(interstellar.getId()));
         Assertions.assertEquals(avatar, filmService.getFilmById(2));
         Assertions.assertEquals(gladiator, filmService.getFilmById(3));
     }
@@ -56,21 +69,19 @@ public class FilmorateFilmServiceTest {
         Assertions.assertTrue(filmService.getAll().contains(interstellar));
         Assertions.assertTrue(filmService.getAll().contains(avatar));
         Assertions.assertTrue(filmService.getAll().contains(gladiator));
-        Assertions.assertTrue(filmService.getAll().size() == 3);
     }
 
     @Test
     public void shouldReturnCorrectFilmAfterCreating() {
-        Film testFilm = new Film("testFilm", "testFilm description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
-        Film createdFilm = filmService.create(testFilm);
-        Assertions.assertEquals(createdFilm, filmService.getFilmById(createdFilm.getId()));
+        Film testFilm = getRandomFilm();
+        testFilm = filmService.create(testFilm);
+        Assertions.assertEquals(testFilm, filmService.getFilmById(testFilm.getId()));
     }
 
     @Test
     public void shouldNotCreateFilmWithIncorrectData() {
-        Film testFilm = new Film("testFilm", "testFilm description",
-                LocalDate.of(2002, 1,5), 135, new MPA(8));
+        Film testFilm = getRandomFilm();
+        testFilm.setMpa(new MPA(8, "HH"));
         long lastFilmId = filmService.getAll().size();
         Assertions.assertThrows(ValidationException.class, () -> filmService.create(testFilm));
         Assertions.assertThrows(NotFoundException.class, () -> filmService.getFilmById(lastFilmId + 1));
@@ -78,34 +89,31 @@ public class FilmorateFilmServiceTest {
 
     @Test
     public void shouldUpdateExistingFilm() {
-        Film testFilm = new Film("filmBeforeUpdate", "description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
-        Film updatedTestFilm = new Film("updatedTestFilm", "description",
-                LocalDate.of(2002, 1,5), 155, new MPA(1, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        updatedTestFilm.setId(testFilm.getId());
-        filmService.update(updatedTestFilm);
-        Assertions.assertEquals(filmService.getFilmById(testFilm.getId()), updatedTestFilm);
+        Assertions.assertEquals(testFilm, filmService.getFilmById(testFilm.getId()));
+        testFilm.setName("updatedName");
+        filmService.update(testFilm);
+        Assertions.assertEquals(testFilm, filmService.getFilmById(testFilm.getId()));
+        Assertions.assertEquals("updatedName", filmService.getFilmById(testFilm.getId()).getName());
     }
 
     @Test
     public void shouldNotUpdateFilmWithIncorrectData() {
-        Film testFilm = new Film("filmBeforeUpdate", "description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
-        Film updatedTestFilm = new Film("updatedTestFilm", "description",
-                LocalDate.of(2002, 1,5), 155, new MPA(8, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        updatedTestFilm.setId(testFilm.getId());
-        Assertions.assertThrows(ValidationException.class, () -> filmService.update(updatedTestFilm));
-        Assertions.assertNotEquals(filmService.getFilmById(testFilm.getId()), updatedTestFilm);
+        Assertions.assertEquals(testFilm, filmService.getFilmById(testFilm.getId()));
+        testFilm.setMpa(new MPA(8, "HH"));
+        Film updatedFilm = testFilm;
+        Assertions.assertThrows(ValidationException.class, () -> filmService.update(updatedFilm));
+        Assertions.assertNotEquals(updatedFilm, filmService.getFilmById(updatedFilm.getId()));
     }
 
     @Test
     public void shouldAddLike() {
-        Film testFilm = new Film("film", "description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        User testUser = new User("testUser@gmail.com", "testUserLogin", "testUser", LocalDate.of(1994, 4, 5));
+        User testUser = getRandomUser();
         testUser = userService.create(testUser);
         long filmId = testFilm.getId();
         long userId = testUser.getId();
@@ -116,10 +124,9 @@ public class FilmorateFilmServiceTest {
 
     @Test
     public void shouldNotAddLikeIfFilmOrUserNotFound() {
-        Film testFilm = new Film("film", "description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        User testUser = new User("testUser@gmail.com", "testUserLogin", "testUser", LocalDate.of(1994, 4, 5));
+        User testUser = getRandomUser();
         testUser = userService.create(testUser);
         long filmId = testFilm.getId();
         long userId = testUser.getId();
@@ -132,10 +139,9 @@ public class FilmorateFilmServiceTest {
 
     @Test
     public void shouldRemoveLike() {
-        Film testFilm = new Film("film", "description",
-                LocalDate.of(2002, 1,5), 135, new MPA(1, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        User testUser = new User("testUser@gmail.com", "testUserLogin", "testUser", LocalDate.of(1994, 4, 5));
+        User testUser = getRandomUser();
         testUser = userService.create(testUser);
         long filmId = testFilm.getId();
         long userId = testUser.getId();
@@ -147,10 +153,9 @@ public class FilmorateFilmServiceTest {
 
     @Test
     public void shouldNotRemoveLikeIfFilmOrUserNotFound() {
-        Film testFilm = new Film("film", "description",
-                LocalDate.of(2002, 1, 5), 135, new MPA(1, "G"));
+        Film testFilm = getRandomFilm();
         testFilm = filmService.create(testFilm);
-        User testUser = new User("testUser@gmail.com", "testUserLogin", "testUser", LocalDate.of(1994, 4, 5));
+        User testUser = getRandomUser();
         testUser = userService.create(testUser);
         long filmId = testFilm.getId();
         long userId = testUser.getId();
@@ -163,6 +168,4 @@ public class FilmorateFilmServiceTest {
         Assertions.assertThrows(NotFoundException.class, () -> filmService.removeLike(wrongFilmId, wrongUserId));
         Assertions.assertEquals(1, filmService.getFilmById(filmId).getLikes());
     }
-
-
 }
