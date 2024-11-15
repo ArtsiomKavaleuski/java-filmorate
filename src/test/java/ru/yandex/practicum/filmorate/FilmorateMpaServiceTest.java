@@ -16,19 +16,19 @@ import ru.yandex.practicum.filmorate.service.MpaService;
 public class FilmorateMpaServiceTest {
     private final MpaService mpaService;
     //уже существующие рейтинги MPA, добавлены в БД через файл data.sql
-    private final MPA G = new MPA(1, "G");
-    private final MPA PG = new MPA(2, "PG");
-    private final MPA PG13 = new MPA(3, "PG-13");
-    private final MPA R = new MPA(4, "R");
-    private final MPA NC17 = new MPA(5, "NC-17");
+    private final MPA g = new MPA(1, "G");
+    private final MPA pg = new MPA(2, "PG");
+    private final MPA pg13 = new MPA(3, "PG-13");
+    private final MPA r = new MPA(4, "R");
+    private final MPA nc17 = new MPA(5, "NC-17");
 
     @Test
     public void shouldReturnCorrectGenre() {
-        Assertions.assertEquals(G, mpaService.getMpaById(1));
-        Assertions.assertEquals(PG, mpaService.getMpaById(2));
-        Assertions.assertEquals(PG13, mpaService.getMpaById(3));
-        Assertions.assertEquals(R, mpaService.getMpaById(4));
-        Assertions.assertEquals(NC17, mpaService.getMpaById(5));
+        Assertions.assertEquals(g, mpaService.getMpaById(1));
+        Assertions.assertEquals(pg, mpaService.getMpaById(2));
+        Assertions.assertEquals(pg13, mpaService.getMpaById(3));
+        Assertions.assertEquals(r, mpaService.getMpaById(4));
+        Assertions.assertEquals(nc17, mpaService.getMpaById(5));
     }
 
     @Test
