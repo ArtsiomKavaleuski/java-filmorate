@@ -14,9 +14,6 @@ public class LikeDbStorage extends BaseDbStorage<Like> implements LikeStorage {
     private static final String INSERT_LIKE_QUERY = "INSERT INTO filmorate.likes(filmId, userId) VALUES(?, ?);";
     private static final String DELETE_LIKE_QUERY = "DELETE FROM filmorate.likes WHERE filmId = ? AND userId = ?;";
     private static final String FIND_LIKES_BY_FILM_QUERY = "SELECT * FROM filmorate.likes WHERE filmId = ?;";
-    private static final String FIND_LIKES_BY_FILMS_QUERY = "SELECT f.id, f.name, f.description, f.releaseDate, " +
-            "f.duration, f.mpa, count(l.userId) AS likes FROM FILMORATE.FILMS f " +
-            "LEFT JOIN FILMORATE.LIKES l ON f.ID = l.FILMID GROUP BY f.id ORDER BY likes DESC LIMIT ?;";
 
     @Autowired
     public LikeDbStorage(JdbcTemplate jdbc, RowMapper<Like> mapper) {
