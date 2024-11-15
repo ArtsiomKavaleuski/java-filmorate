@@ -40,11 +40,11 @@ public class FilmorateMpaServiceTest {
 
     @Test
     public void shouldReturnCollectionOfGenresWithAllGenres() {
-        Assertions.assertTrue(mpaService.getAll().contains(G));
-        Assertions.assertTrue(mpaService.getAll().contains(PG));
-        Assertions.assertTrue(mpaService.getAll().contains(PG13));
-        Assertions.assertTrue(mpaService.getAll().contains(R));
-        Assertions.assertTrue(mpaService.getAll().contains(NC17));
+        Assertions.assertTrue(mpaService.getAll().contains(g));
+        Assertions.assertTrue(mpaService.getAll().contains(pg));
+        Assertions.assertTrue(mpaService.getAll().contains(pg13));
+        Assertions.assertTrue(mpaService.getAll().contains(r));
+        Assertions.assertTrue(mpaService.getAll().contains(nc17));
         Assertions.assertEquals(5, mpaService.getAll().size());
     }
 }
