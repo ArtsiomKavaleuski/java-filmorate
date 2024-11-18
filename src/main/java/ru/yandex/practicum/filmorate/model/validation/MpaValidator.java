@@ -4,14 +4,7 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import ru.yandex.practicum.filmorate.model.MPA;
 
-import java.time.LocalDate;
-
-public class MpaValidator implements ConstraintValidator<Mpa, MPA> {
-
-//    @Override
-//    public void initialize(Mpa constraintAnnotation) {
-//        MPA mpa = constraintAnnotation.value();
-//    }
+public class MpaValidator implements ConstraintValidator<MpaCheck, MPA> {
 
     @Override
     public boolean isValid(MPA mpa, ConstraintValidatorContext context) {

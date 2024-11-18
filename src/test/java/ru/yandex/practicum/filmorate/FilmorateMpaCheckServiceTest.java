@@ -13,7 +13,7 @@ import ru.yandex.practicum.filmorate.service.MpaService;
 @SpringBootTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class FilmorateMpaServiceTest {
+public class FilmorateMpaCheckServiceTest {
     private final MpaService mpaService;
     //уже существующие рейтинги MPA, добавлены в БД через файл data.sql
     private final MPA g = new MPA(1, "G");

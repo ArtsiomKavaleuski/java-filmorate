@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Assertions;
@@ -71,7 +72,7 @@ public class FilmorateUserServiceTest {
     public void shouldReturnExceptionWhenCreatingUserWithIncorrectData() {
         User testUser = getRandomUser();
         testUser.setEmail("ghjhjg");
-        Assertions.assertThrows(ValidationException.class, () -> userService.create(testUser));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userService.create(testUser));
     }
 
     @Test
@@ -79,7 +80,7 @@ public class FilmorateUserServiceTest {
         User testUser = getRandomUser();
         testUser.setLogin("one one");
         long testUserExpectedId = userService.getAll().size() + 1;
-        Assertions.assertThrows(ValidationException.class, () -> userService.create(testUser));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userService.create(testUser));
         Assertions.assertThrows(NotFoundException.class, () -> userService.getUserById(testUserExpectedId));
     }
 
@@ -99,7 +100,7 @@ public class FilmorateUserServiceTest {
         userService.create(testUser);
         Assertions.assertEquals(testUser, userService.getUserById(testUser.getId()));
         testUser.setLogin("updated User");
-        Assertions.assertThrows(ValidationException.class, () -> userService.update(testUser));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userService.update(testUser));
         Assertions.assertNotEquals(testUser, userService.getUserById(testUser.getId()));
     }
 

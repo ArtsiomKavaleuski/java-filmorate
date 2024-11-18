@@ -1,7 +1,10 @@
 package ru.yandex.practicum.filmorate;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,12 +27,18 @@ class FilmorateValidationTests {
     UserController userController;
     @Autowired
     FilmController filmController;
-    User user = new User(1, "test@gmail.com", "user", "user",
-            LocalDate.of(2000,1,1), new HashSet<>());
 
     Film film = new Film(1, "film", "daescription",
             LocalDate.of(2000,1,1), 100,
             new MPA(1, "G"), new HashSet<>(), 0);
+
+    public User getRandomUser() {
+        String email = RandomString.make(7) + "@gmail.com";
+        String login = RandomString.make(7);
+        String name = RandomString.make(7);
+        LocalDate birthday = LocalDate.of(2000, 1, 1);
+        return new User(email, login, name, birthday);
+    }
 
     @Test
     void contextLoads() {
@@ -37,35 +46,41 @@ class FilmorateValidationTests {
 
     @Test
     void shouldThrowValidationExceptionWhenUserEmailIsEmpty() {
+        User user = getRandomUser();
         user.setEmail("");
-        Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenUserBirthdayIsInFuture() {
+        User user = getRandomUser();
         user.setBirthday(LocalDate.of(2033, 1, 1));
-        Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenUserLoginIsEmpty() {
+        User user = getRandomUser();
         user.setLogin("");
-        Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenUserLoginContainsWhitespaces() {
+        User user = getRandomUser();
         user.setLogin("artemyc 333");
-        Assertions.assertThrows(ValidationException.class, () -> userController.create(user));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userController.create(user));
     }
 
     @Test
     void shouldNotThrowValidationExceptionWhenUserIsCorrect() {
+        User user = getRandomUser();
         Assertions.assertDoesNotThrow(() -> userController.create(user));
     }
 
     @Test
     void shouldNotThrowValidationExceptionWhenUserNameIsEmpty() {
+        User user = getRandomUser();
         user.setName("");
         Assertions.assertDoesNotThrow(() -> userController.create(user));
         Assertions.assertEquals(user.getName(), user.getLogin());
@@ -74,25 +89,25 @@ class FilmorateValidationTests {
     @Test
     void shouldThrowValidationExceptionWhenFilmNameIsEmpty() {
         film.setName("");
-        Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmController.create(film));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenFilmDescriptionLengthIsTooBig() {
         film.setDescription("1".repeat(201));
-        Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmController.create(film));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenFilmReleaseDateIsBefore28Dec1895() {
         film.setReleaseDate(LocalDate.of(1895, 12, 27));
-        Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmController.create(film));
     }
 
     @Test
     void shouldThrowValidationExceptionWhenFilmDurationIsNegative() {
         film.setDuration(-1);
-        Assertions.assertThrows(ValidationException.class, () -> filmController.create(film));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmController.create(film));
     }
 
     @Test
@@ -112,11 +127,12 @@ class FilmorateValidationTests {
     void shouldThrowValidationExceptionWhenUpdateFilmWithIncorrectFields() {
         filmController.create(film);
         film.setDuration(-100);
-        Assertions.assertThrows(ValidationException.class, () -> filmController.update(film));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmController.update(film));
     }
 
     @Test
     void shouldNotThrowValidationExceptionWhenUpdateUserWithCorrectFields() {
+        User user = getRandomUser();
         userController.create(user);
         user.setName("Anon");
         Assertions.assertDoesNotThrow(() -> userController.update(user));
@@ -125,8 +141,10 @@ class FilmorateValidationTests {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateUserWithIncorrectFields() {
-        userController.create(user);
+        User user = getRandomUser();
+        user = userController.create(user);
         user.setEmail("");
-        Assertions.assertThrows(ValidationException.class, () -> userController.update(user));
+        User finalUser = user;
+        Assertions.assertThrows(ConstraintViolationException.class, () -> userController.update(finalUser));
     }
 }

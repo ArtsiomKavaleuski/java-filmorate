@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.Assertions;
@@ -83,7 +84,7 @@ public class FilmorateFilmServiceTest {
         Film testFilm = getRandomFilm();
         testFilm.setMpa(new MPA(8, "HH"));
         long lastFilmId = filmService.getAll().size();
-        Assertions.assertThrows(ValidationException.class, () -> filmService.create(testFilm));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmService.create(testFilm));
         Assertions.assertThrows(NotFoundException.class, () -> filmService.getFilmById(lastFilmId + 1));
     }
 
@@ -105,7 +106,7 @@ public class FilmorateFilmServiceTest {
         Assertions.assertEquals(testFilm, filmService.getFilmById(testFilm.getId()));
         testFilm.setMpa(new MPA(8, "HH"));
         Film updatedFilm = testFilm;
-        Assertions.assertThrows(ValidationException.class, () -> filmService.update(updatedFilm));
+        Assertions.assertThrows(ConstraintViolationException.class, () -> filmService.update(updatedFilm));
         Assertions.assertNotEquals(updatedFilm, filmService.getFilmById(updatedFilm.getId()));
     }
 
