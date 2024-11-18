@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Repository
 public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
@@ -34,7 +33,8 @@ public class UserDbStorage extends BaseDbStorage<User> implements UserStorage {
 
     @Override
     public User getUserById(long id) {
-        return findOne(FIND_BY_ID_QUERY, id).orElseThrow(() -> new NotFoundException("Пользователь с id = " + id + " не найден."));
+        return findOne(FIND_BY_ID_QUERY, id)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id = " + id + " не найден."));
     }
 
     @Override

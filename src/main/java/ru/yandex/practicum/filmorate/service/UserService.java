@@ -63,7 +63,8 @@ public class UserService {
         }
         friendStorage.addFriend(checkedUserId, checkedFriendId);
         if (!friendStorage.getFriendsById(checkedFriendId).isEmpty()
-                && friendStorage.getFriendsById(checkedFriendId).stream().anyMatch(f -> f.getFriendId() == checkedUserId)) {
+                && friendStorage.getFriendsById(checkedFriendId).stream()
+                .anyMatch(f -> f.getFriendId() == checkedUserId)) {
             friendStorage.updateReciprocity(checkedUserId, checkedFriendId, Boolean.TRUE);
             friendStorage.updateReciprocity(checkedFriendId, checkedUserId, Boolean.TRUE);
         }
@@ -75,7 +76,8 @@ public class UserService {
         long checkedFriendId = getUserById(friendId).getId();
         checkIds(checkedUserId, checkedFriendId);
         friendStorage.removeFriend(checkedUserId, checkedFriendId);
-        if (friendStorage.getFriendsById(checkedFriendId).stream().anyMatch(f -> f.getFriendId() == checkedUserId)) {
+        if (friendStorage.getFriendsById(checkedFriendId).stream().
+                anyMatch(f -> f.getFriendId() == checkedUserId)) {
             friendStorage.updateReciprocity(checkedFriendId, checkedUserId, Boolean.FALSE);
         }
         log.info("Из друзей пользователя с id = {} удален пользователь с id = {}.", checkedUserId, checkedFriendId);
@@ -101,30 +103,11 @@ public class UserService {
     }
 
     private void checkUserName(User user) {
-//        if (user.getEmail() == null || !user.getEmail().contains("@") || user.getEmail().isBlank()) {
-//            log.warn("Не указана электронная почта пользователя");
-//            throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @");
-//        }
-//        if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-//            log.warn("Логин пользователя не указан или содержит пробелы");
-//            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-//        }
-//        if (user.getBirthday().isAfter(LocalDate.now())) {
-//            log.warn("Введенная дата рождения пользователя некорректна");
-//            throw new ValidationException("Дата рождения не может быть в будущем");
-//        }
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
             log.info("Вместо имени пользователя использован логин");
         }
     }
-
-//    private void checkUserNotFound(long id) {
-//        if (userStorage.getUserById(id).isEmpty()) {
-//            log.warn("Пользователь с id = {} не найден.", id);
-//            throw new NotFoundException("Пользователь с id = " + id + " не найден");
-//        }
-//    }
 
     private void checkIds(long id, long friendId) {
         if (id == friendId) {

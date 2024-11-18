@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,12 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Genre implements Comparable<Genre> {
+    @Min(value = 1, message = "Индекс жанра должен быть от 1 до 6")
+    @Max(value = 6, message = "Индекс жанра должен быть от 1 до 6")
     private long id;
     private String name;
-
-    public Genre(long id) {
-        this.id = id;
-    }
 
     @Override
     public int compareTo(Genre genre) {

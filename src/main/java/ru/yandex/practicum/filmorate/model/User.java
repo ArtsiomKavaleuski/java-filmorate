@@ -15,7 +15,7 @@ import java.util.Set;
 public class User {
     private long id;
     @NotBlank(message = "Электронная почта не может быть пустой")
-    @Email(message = "Электронная почта не может быть пустой и должна содержать символ @")
+    @Email(message = "Электронная почта должна содержать символ @")
     private String email;
     @NotBlank(message = "Логин не может быть пустым.")
     @Pattern(regexp = "^\\S*$", message = "Логин не может содержать пробелы.")

@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.yandex.practicum.filmorate.model.validation.GenreCheck;
 import ru.yandex.practicum.filmorate.model.validation.MinimumDate;
-import ru.yandex.practicum.filmorate.model.validation.MpaCheck;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -25,9 +24,9 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private long duration;
-    @MpaCheck(message = "MPA рейтинг должен быть указан и его id должен быть от 1 до 5")
+    @Valid
     private MPA mpa;
-    @GenreCheck(message = "Указан жанр с несуществующим id")
+    @Valid
     private Set<Genre> genres = new HashSet<>();
     private long likes;
 

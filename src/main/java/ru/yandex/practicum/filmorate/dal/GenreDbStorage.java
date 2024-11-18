@@ -9,7 +9,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.GenreStorage;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Repository
 public class GenreDbStorage extends BaseDbStorage<Genre> implements GenreStorage {
@@ -32,7 +31,8 @@ public class GenreDbStorage extends BaseDbStorage<Genre> implements GenreStorage
 
     @Override
     public Genre getGenreById(long id) {
-        return findOne(FIND_GENRE_BY_ID_QUERY, id).orElseThrow(() -> new NotFoundException("Жанр с id = " + id + " не найден."));
+        return findOne(FIND_GENRE_BY_ID_QUERY, id)
+                .orElseThrow(() -> new NotFoundException("Жанр с id = " + id + " не найден."));
     }
 
     @Override

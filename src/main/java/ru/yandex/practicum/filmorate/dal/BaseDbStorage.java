@@ -5,10 +5,12 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
-import ru.yandex.practicum.filmorate.exception.InternalServerException;
+import ru.yandex.practicum.filmorate.exception.InsertFailedException;
+import ru.yandex.practicum.filmorate.exception.UpdateFailedException;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
@@ -39,7 +41,8 @@ public class BaseDbStorage<T> {
     protected void update(String query, Object... params) {
         int rowsUpdated = jdbc.update(query, params);
         if (rowsUpdated == 0) {
-            throw new InternalServerException("Не удалось обновить данные");
+            throw new UpdateFailedException("При попытке выполнить SQL запрос [" + query + "] " +
+                    "с параметрами запроса [" + Arrays.toString(params) + "] произошла ошибка.");
         }
     }
 
@@ -57,7 +60,8 @@ public class BaseDbStorage<T> {
         if (keyHolder.getKey() != null) {
             return id;
         } else {
-            throw new InternalServerException("Не удалось сохранить данные");
+            throw new InsertFailedException("При попытке выполнить SQL запрос [" + query + "] " +
+                    "с параметрами запроса [" + Arrays.toString(params) + "] произошла ошибка.");
         }
     }
 }
