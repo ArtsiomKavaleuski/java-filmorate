@@ -76,8 +76,8 @@ public class UserService {
         long checkedFriendId = getUserById(friendId).getId();
         checkIds(checkedUserId, checkedFriendId);
         friendStorage.removeFriend(checkedUserId, checkedFriendId);
-        if (friendStorage.getFriendsById(checkedFriendId).stream().
-                anyMatch(f -> f.getFriendId() == checkedUserId)) {
+        if (friendStorage.getFriendsById(checkedFriendId).stream()
+                        .anyMatch(f -> f.getFriendId() == checkedUserId)) {
             friendStorage.updateReciprocity(checkedFriendId, checkedUserId, Boolean.FALSE);
         }
         log.info("Из друзей пользователя с id = {} удален пользователь с id = {}.", checkedUserId, checkedFriendId);
