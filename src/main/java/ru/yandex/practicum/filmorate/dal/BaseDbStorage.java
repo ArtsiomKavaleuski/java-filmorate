@@ -11,18 +11,19 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class BaseDbStorage<T> {
     protected final JdbcTemplate jdbc;
     protected final RowMapper<T> mapper;
 
-    protected T findOne(String query, Object... params) {
+    protected Optional<T> findOne(String query, Object... params) {
         try {
-            T result = jdbc.queryForObject(query, mapper, params);
+            Optional<T> result = Optional.ofNullable(jdbc.queryForObject(query, mapper, params));
             return result;
         } catch (EmptyResultDataAccessException ignored) {
-            return null;
+            return Optional.empty();
         }
     }
 

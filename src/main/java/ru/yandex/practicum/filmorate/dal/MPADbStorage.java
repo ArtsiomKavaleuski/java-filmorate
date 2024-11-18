@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.MPA;
 import ru.yandex.practicum.filmorate.storage.MpaStorage;
 
@@ -28,11 +29,6 @@ public class MPADbStorage extends BaseDbStorage<MPA> implements MpaStorage {
 
     @Override
     public MPA getMpaById(long id) {
-        return findOne(FIND_MPA_BY_ID_QUERY, id);
-    }
-
-    @Override
-    public MPA getMpaByFilm(long filmId) {
-        return findOne(FIND_MPA_BY_FILM_QUERY, filmId);
+        return findOne(FIND_MPA_BY_ID_QUERY, id).orElseThrow(() -> new NotFoundException("MPA рейтинг с id = " + id + " не найден."));
     }
 }

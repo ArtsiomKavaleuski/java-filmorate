@@ -1,8 +1,16 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+import ru.yandex.practicum.filmorate.model.validation.MinimumDate;
+import ru.yandex.practicum.filmorate.model.validation.Mpa;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,11 +21,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class Film implements Comparable<Film> {
     private long id;
+    @NotNull(message = "Название не может быть пустым")
     private String name;
+    @Size(max = 200, message = "Максимальная длина описания - 200 символов")
     private String description;
+    @MinimumDate(message = "Дата релиза не может быть раньше 28 декабря 1895 года")
     private LocalDate releaseDate;
+    @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private long duration;
-    MPA mpa;
+    @Mpa(message = "MPA рейтинг с таким id не существует")
+    private MPA mpa;
     private Set<Genre> genres = new HashSet<>();
     private long likes;
 
