@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,15 +10,12 @@ import ru.yandex.practicum.filmorate.service.UserService;
 import java.util.Collection;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
-    private final UserService userService;
-
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @GetMapping
     public Collection<User> getAll() {
@@ -34,10 +32,9 @@ public class UserController {
         return userService.getAllFriends(id);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
-    public Collection<User> getCommonFriends(@PathVariable("id") long id,
-                                             @PathVariable("otherId") long otherId) {
-        return userService.getCommonFriends(id, otherId);
+    @GetMapping("/{id}/friends/common/{friendId}")
+    public Collection<User> getCommonFriends(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
+        return userService.getCommonFriends(id, friendId);
     }
 
     @PostMapping
@@ -47,24 +44,20 @@ public class UserController {
     }
 
     @PutMapping
-    public User update(@RequestBody User newUser) {
-        log.info("Передан модифицированный объект пользователя {} для обновления.", newUser);
-        return userService.update(newUser);
+    public User update(@RequestBody User user) {
+        log.info("Передан модифицированный объект пользователя {} для обновления.", user);
+        return userService.update(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addToFriends(@PathVariable("id") long id,
-                                       @PathVariable("friendId") long friendId) {
+    public void addToFriends(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         log.info("Передан id = {} для добавления в друзья пользователю с id = {}", friendId, id);
-        return userService.addFriend(id, friendId);
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User removeFriend(@PathVariable("id") long id,
-                                       @PathVariable("friendId") long friendId) {
+    public void removeFriend(@PathVariable("id") long id, @PathVariable("friendId") long friendId) {
         log.info("Передан id = {} для удаления из друзей пользователя с id = {}", friendId, id);
-        return userService.removeFriend(id, friendId);
+        userService.removeFriend(id, friendId);
     }
-
-
 }
